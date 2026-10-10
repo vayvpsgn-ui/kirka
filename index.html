@@ -6,6 +6,8 @@
     <title>Minecraft Mine Bouncer Deluxe</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Yandex Games SDK: на платформе /sdk.js отдаёт Яндекс; локально файла нет — реклама/облако работают в демо-режиме -->
+    <script src="/sdk.js"></script>
     <style>
         :root {
             --gold: #ffd54f;
@@ -43,11 +45,10 @@
             height: min(100dvh, 920px);
             max-height: 920px;
             background: #1b0f4a;
-            box-shadow: 0 0 60px rgba(120, 80, 255, 0.45);
             overflow: hidden;
         }
         @media (min-width: 520px) {
-            #app-frame { border-radius: 18px; border: 3px solid rgba(255,255,255,0.18); }
+            #app-frame { border-radius: 18px; border: 3px solid rgba(255,255,255,0.18); box-shadow: 0 0 60px rgba(120, 80, 255, 0.45); }
         }
         canvas {
             display: block;
@@ -371,9 +372,8 @@
         #screen-menu { background: linear-gradient(180deg, rgba(12,6,36,0.30) 0%, rgba(10,4,30,0.72) 100%); }
         .menu-center { flex: 1; display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 6px; text-align: center; }
         #menu-pick {
-            width: 120px; height: 120px;
+            width: 176px; height: 176px; margin: -28px;
             image-rendering: pixelated;
-            filter: drop-shadow(0 6px 0 rgba(0,0,0,0.4)) drop-shadow(0 0 18px rgba(120,230,255,0.45));
             animation: pick-float 3s ease-in-out infinite;
         }
         @keyframes pick-float { 0%,100% { transform: translateY(0) rotate(-8deg); } 50% { transform: translateY(-10px) rotate(8deg); } }
@@ -426,7 +426,16 @@
             #menu-pick, #slam-indicator.ready { animation: none; }
         }
         .btn:disabled:not(.btn-buy) { opacity: 0.55; filter: grayscale(0.5); box-shadow: none; cursor: not-allowed; }
-        .tabs .tab-btn { font-size: 12px; padding: 9px 2px; }
+        .tabs .tab-btn { font-size: 11px; padding: 9px 2px; }
+        .u-btns { flex: none; display: flex; flex-direction: column; gap: 6px; }
+        .btn-pay { background: linear-gradient(180deg, #ffd96a, #f0a020); box-shadow: 0 3px 0 #a86a08; color: #4a2a00; text-shadow: none; }
+        .btn-pay:active { box-shadow: 0 1px 0 #a86a08; }
+        .lb-login { width: 100%; margin-bottom: 6px; }
+        .lang-list { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
+        .lang-btn { padding: 9px 4px; font-size: 13px; min-height: 0; }
+        html[lang="ar"] { --font: 'Tahoma', 'Segoe UI', 'Noto Sans Arabic', system-ui, sans-serif; }
+        html[lang="ar"] * { letter-spacing: 0 !important; }
+        html[lang="ar"] .u-title, html[lang="ar"] .u-desc, html[lang="ar"] .u-level, html[lang="ar"] .toast { unicode-bidi: plaintext; }
     </style>
 </head>
 <body>
@@ -446,10 +455,10 @@
                 <div id="durability-fill"></div>
                 <div id="dur-text"></div>
             </div>
-            <button id="btn-pause" aria-label="Пауза"><i></i><i></i></button>
+            <button id="btn-pause" aria-label="Пауза" data-i18n-aria="pause_aria"><i></i><i></i></button>
         </div>
     </div>
-    <div id="slam-indicator" class="hidden" role="button" aria-label="Слэм">
+    <div id="slam-indicator" class="hidden" role="button" aria-label="Слэм" data-i18n-aria="slam_aria">
         <svg id="slam-icon" viewBox="0 0 16 16" width="48" height="48" shape-rendering="crispEdges" aria-hidden="true"><rect x="1" y="1" width="1" height="1" fill="#171028"/><rect x="2" y="1" width="1" height="1" fill="#171028"/><rect x="3" y="1" width="1" height="1" fill="#171028"/><rect x="4" y="1" width="1" height="1" fill="#171028"/><rect x="5" y="1" width="1" height="1" fill="#171028"/><rect x="6" y="1" width="1" height="1" fill="#171028"/><rect x="7" y="1" width="1" height="1" fill="#171028"/><rect x="8" y="1" width="1" height="1" fill="#171028"/><rect x="9" y="1" width="1" height="1" fill="#171028"/><rect x="10" y="1" width="1" height="1" fill="#171028"/><rect x="11" y="1" width="1" height="1" fill="#171028"/><rect x="12" y="1" width="1" height="1" fill="#171028"/><rect x="13" y="1" width="1" height="1" fill="#171028"/><rect x="14" y="1" width="1" height="1" fill="#171028"/><rect x="0" y="2" width="1" height="1" fill="#171028"/><rect x="1" y="2" width="1" height="1" fill="#171028"/><rect x="2" y="2" width="1" height="1" fill="#e6eaf6"/><rect x="3" y="2" width="1" height="1" fill="#e6eaf6"/><rect x="4" y="2" width="1" height="1" fill="#e6eaf6"/><rect x="5" y="2" width="1" height="1" fill="#e6eaf6"/><rect x="6" y="2" width="1" height="1" fill="#e6eaf6"/><rect x="7" y="2" width="1" height="1" fill="#e6eaf6"/><rect x="8" y="2" width="1" height="1" fill="#e6eaf6"/><rect x="9" y="2" width="1" height="1" fill="#e6eaf6"/><rect x="10" y="2" width="1" height="1" fill="#e6eaf6"/><rect x="11" y="2" width="1" height="1" fill="#e6eaf6"/><rect x="12" y="2" width="1" height="1" fill="#e6eaf6"/><rect x="13" y="2" width="1" height="1" fill="#e6eaf6"/><rect x="14" y="2" width="1" height="1" fill="#171028"/><rect x="15" y="2" width="1" height="1" fill="#171028"/><rect x="0" y="3" width="1" height="1" fill="#171028"/><rect x="1" y="3" width="1" height="1" fill="#e6eaf6"/><rect x="2" y="3" width="1" height="1" fill="#e6eaf6"/><rect x="3" y="3" width="1" height="1" fill="#e6eaf6"/><rect x="4" y="3" width="1" height="1" fill="#e6eaf6"/><rect x="5" y="3" width="1" height="1" fill="#e6eaf6"/><rect x="6" y="3" width="1" height="1" fill="#e6eaf6"/><rect x="7" y="3" width="1" height="1" fill="#e6eaf6"/><rect x="8" y="3" width="1" height="1" fill="#e6eaf6"/><rect x="9" y="3" width="1" height="1" fill="#e6eaf6"/><rect x="10" y="3" width="1" height="1" fill="#e6eaf6"/><rect x="11" y="3" width="1" height="1" fill="#e6eaf6"/><rect x="12" y="3" width="1" height="1" fill="#e6eaf6"/><rect x="13" y="3" width="1" height="1" fill="#e6eaf6"/><rect x="14" y="3" width="1" height="1" fill="#8f97b0"/><rect x="15" y="3" width="1" height="1" fill="#171028"/><rect x="0" y="4" width="1" height="1" fill="#171028"/><rect x="1" y="4" width="1" height="1" fill="#8f97b0"/><rect x="2" y="4" width="1" height="1" fill="#8f97b0"/><rect x="3" y="4" width="1" height="1" fill="#8f97b0"/><rect x="4" y="4" width="1" height="1" fill="#8f97b0"/><rect x="5" y="4" width="1" height="1" fill="#8f97b0"/><rect x="6" y="4" width="1" height="1" fill="#8f97b0"/><rect x="7" y="4" width="1" height="1" fill="#8f97b0"/><rect x="8" y="4" width="1" height="1" fill="#8f97b0"/><rect x="9" y="4" width="1" height="1" fill="#8f97b0"/><rect x="10" y="4" width="1" height="1" fill="#8f97b0"/><rect x="11" y="4" width="1" height="1" fill="#8f97b0"/><rect x="12" y="4" width="1" height="1" fill="#8f97b0"/><rect x="13" y="4" width="1" height="1" fill="#8f97b0"/><rect x="14" y="4" width="1" height="1" fill="#4a4f66"/><rect x="15" y="4" width="1" height="1" fill="#171028"/><rect x="0" y="5" width="1" height="1" fill="#171028"/><rect x="1" y="5" width="1" height="1" fill="#171028"/><rect x="2" y="5" width="1" height="1" fill="#4a4f66"/><rect x="3" y="5" width="1" height="1" fill="#4a4f66"/><rect x="4" y="5" width="1" height="1" fill="#8f97b0"/><rect x="5" y="5" width="1" height="1" fill="#8f97b0"/><rect x="6" y="5" width="1" height="1" fill="#8f97b0"/><rect x="7" y="5" width="1" height="1" fill="#8f97b0"/><rect x="8" y="5" width="1" height="1" fill="#8f97b0"/><rect x="9" y="5" width="1" height="1" fill="#8f97b0"/><rect x="10" y="5" width="1" height="1" fill="#8f97b0"/><rect x="11" y="5" width="1" height="1" fill="#8f97b0"/><rect x="12" y="5" width="1" height="1" fill="#4a4f66"/><rect x="13" y="5" width="1" height="1" fill="#4a4f66"/><rect x="14" y="5" width="1" height="1" fill="#171028"/><rect x="15" y="5" width="1" height="1" fill="#171028"/><rect x="1" y="6" width="1" height="1" fill="#171028"/><rect x="2" y="6" width="1" height="1" fill="#171028"/><rect x="3" y="6" width="1" height="1" fill="#171028"/><rect x="4" y="6" width="1" height="1" fill="#4a4f66"/><rect x="5" y="6" width="1" height="1" fill="#8f97b0"/><rect x="6" y="6" width="1" height="1" fill="#8f97b0"/><rect x="7" y="6" width="1" height="1" fill="#8f97b0"/><rect x="8" y="6" width="1" height="1" fill="#8f97b0"/><rect x="9" y="6" width="1" height="1" fill="#8f97b0"/><rect x="10" y="6" width="1" height="1" fill="#8f97b0"/><rect x="11" y="6" width="1" height="1" fill="#4a4f66"/><rect x="12" y="6" width="1" height="1" fill="#171028"/><rect x="13" y="6" width="1" height="1" fill="#171028"/><rect x="14" y="6" width="1" height="1" fill="#171028"/><rect x="3" y="7" width="1" height="1" fill="#171028"/><rect x="4" y="7" width="1" height="1" fill="#171028"/><rect x="5" y="7" width="1" height="1" fill="#8f97b0"/><rect x="6" y="7" width="1" height="1" fill="#8f97b0"/><rect x="7" y="7" width="1" height="1" fill="#8f97b0"/><rect x="8" y="7" width="1" height="1" fill="#8f97b0"/><rect x="9" y="7" width="1" height="1" fill="#8f97b0"/><rect x="10" y="7" width="1" height="1" fill="#8f97b0"/><rect x="11" y="7" width="1" height="1" fill="#4a4f66"/><rect x="12" y="7" width="1" height="1" fill="#171028"/><rect x="4" y="8" width="1" height="1" fill="#171028"/><rect x="5" y="8" width="1" height="1" fill="#8f97b0"/><rect x="6" y="8" width="1" height="1" fill="#8f97b0"/><rect x="7" y="8" width="1" height="1" fill="#8f97b0"/><rect x="8" y="8" width="1" height="1" fill="#8f97b0"/><rect x="9" y="8" width="1" height="1" fill="#8f97b0"/><rect x="10" y="8" width="1" height="1" fill="#8f97b0"/><rect x="11" y="8" width="1" height="1" fill="#4a4f66"/><rect x="12" y="8" width="1" height="1" fill="#171028"/><rect x="3" y="9" width="1" height="1" fill="#171028"/><rect x="4" y="9" width="1" height="1" fill="#171028"/><rect x="5" y="9" width="1" height="1" fill="#4a4f66"/><rect x="6" y="9" width="1" height="1" fill="#8f97b0"/><rect x="7" y="9" width="1" height="1" fill="#8f97b0"/><rect x="8" y="9" width="1" height="1" fill="#8f97b0"/><rect x="9" y="9" width="1" height="1" fill="#8f97b0"/><rect x="10" y="9" width="1" height="1" fill="#4a4f66"/><rect x="11" y="9" width="1" height="1" fill="#4a4f66"/><rect x="12" y="9" width="1" height="1" fill="#171028"/><rect x="13" y="9" width="1" height="1" fill="#171028"/><rect x="2" y="10" width="1" height="1" fill="#171028"/><rect x="3" y="10" width="1" height="1" fill="#171028"/><rect x="4" y="10" width="1" height="1" fill="#4a4f66"/><rect x="5" y="10" width="1" height="1" fill="#8f97b0"/><rect x="6" y="10" width="1" height="1" fill="#8f97b0"/><rect x="7" y="10" width="1" height="1" fill="#8f97b0"/><rect x="8" y="10" width="1" height="1" fill="#8f97b0"/><rect x="9" y="10" width="1" height="1" fill="#8f97b0"/><rect x="10" y="10" width="1" height="1" fill="#8f97b0"/><rect x="11" y="10" width="1" height="1" fill="#4a4f66"/><rect x="12" y="10" width="1" height="1" fill="#4a4f66"/><rect x="13" y="10" width="1" height="1" fill="#171028"/><rect x="14" y="10" width="1" height="1" fill="#171028"/><rect x="1" y="11" width="1" height="1" fill="#171028"/><rect x="2" y="11" width="1" height="1" fill="#171028"/><rect x="3" y="11" width="1" height="1" fill="#8f97b0"/><rect x="4" y="11" width="1" height="1" fill="#8f97b0"/><rect x="5" y="11" width="1" height="1" fill="#8f97b0"/><rect x="6" y="11" width="1" height="1" fill="#8f97b0"/><rect x="7" y="11" width="1" height="1" fill="#8f97b0"/><rect x="8" y="11" width="1" height="1" fill="#8f97b0"/><rect x="9" y="11" width="1" height="1" fill="#8f97b0"/><rect x="10" y="11" width="1" height="1" fill="#8f97b0"/><rect x="11" y="11" width="1" height="1" fill="#8f97b0"/><rect x="12" y="11" width="1" height="1" fill="#8f97b0"/><rect x="13" y="11" width="1" height="1" fill="#4a4f66"/><rect x="14" y="11" width="1" height="1" fill="#171028"/><rect x="15" y="11" width="1" height="1" fill="#171028"/><rect x="1" y="12" width="1" height="1" fill="#171028"/><rect x="2" y="12" width="1" height="1" fill="#8f97b0"/><rect x="3" y="12" width="1" height="1" fill="#8f97b0"/><rect x="4" y="12" width="1" height="1" fill="#8f97b0"/><rect x="5" y="12" width="1" height="1" fill="#8f97b0"/><rect x="6" y="12" width="1" height="1" fill="#8f97b0"/><rect x="7" y="12" width="1" height="1" fill="#8f97b0"/><rect x="8" y="12" width="1" height="1" fill="#8f97b0"/><rect x="9" y="12" width="1" height="1" fill="#8f97b0"/><rect x="10" y="12" width="1" height="1" fill="#8f97b0"/><rect x="11" y="12" width="1" height="1" fill="#8f97b0"/><rect x="12" y="12" width="1" height="1" fill="#8f97b0"/><rect x="13" y="12" width="1" height="1" fill="#8f97b0"/><rect x="14" y="12" width="1" height="1" fill="#4a4f66"/><rect x="15" y="12" width="1" height="1" fill="#171028"/><rect x="1" y="13" width="1" height="1" fill="#171028"/><rect x="2" y="13" width="1" height="1" fill="#4a4f66"/><rect x="3" y="13" width="1" height="1" fill="#4a4f66"/><rect x="4" y="13" width="1" height="1" fill="#4a4f66"/><rect x="5" y="13" width="1" height="1" fill="#4a4f66"/><rect x="6" y="13" width="1" height="1" fill="#4a4f66"/><rect x="7" y="13" width="1" height="1" fill="#4a4f66"/><rect x="8" y="13" width="1" height="1" fill="#4a4f66"/><rect x="9" y="13" width="1" height="1" fill="#4a4f66"/><rect x="10" y="13" width="1" height="1" fill="#4a4f66"/><rect x="11" y="13" width="1" height="1" fill="#4a4f66"/><rect x="12" y="13" width="1" height="1" fill="#4a4f66"/><rect x="13" y="13" width="1" height="1" fill="#4a4f66"/><rect x="14" y="13" width="1" height="1" fill="#4a4f66"/><rect x="15" y="13" width="1" height="1" fill="#171028"/><rect x="1" y="14" width="1" height="1" fill="#171028"/><rect x="2" y="14" width="1" height="1" fill="#171028"/><rect x="3" y="14" width="1" height="1" fill="#171028"/><rect x="4" y="14" width="1" height="1" fill="#171028"/><rect x="5" y="14" width="1" height="1" fill="#171028"/><rect x="6" y="14" width="1" height="1" fill="#171028"/><rect x="7" y="14" width="1" height="1" fill="#171028"/><rect x="8" y="14" width="1" height="1" fill="#171028"/><rect x="9" y="14" width="1" height="1" fill="#171028"/><rect x="10" y="14" width="1" height="1" fill="#171028"/><rect x="11" y="14" width="1" height="1" fill="#171028"/><rect x="12" y="14" width="1" height="1" fill="#171028"/><rect x="13" y="14" width="1" height="1" fill="#171028"/><rect x="14" y="14" width="1" height="1" fill="#171028"/><rect x="15" y="14" width="1" height="1" fill="#171028"/><rect x="5" y="3" width="3" height="1" fill="#ffffff"/></svg>
         <div class="slam-cd"></div>
         <span class="slam-lbl" id="slam-txt">СЛЭМ</span>
@@ -460,72 +469,77 @@
         <div class="menu-center">
             <img id="menu-pick" alt="">
             <div class="logo"><span class="logo-1">MINE</span><span class="logo-2">BOUNCER</span></div>
-            <div class="logo-sub">ГЛУБОКАЯ ШАХТА</div>
+            <div class="logo-sub" data-i18n="menu_sub">ГЛУБОКАЯ ШАХТА</div>
         </div>
         <div class="menu-bottom">
             <div class="menu-stats"><span id="menu-best">🏆 0 м</span><span id="menu-coins">🪙 0</span></div>
-            <button class="btn btn-launch btn-wide" id="btn-play">ИГРАТЬ ▶</button>
-            <button class="btn btn-ghost btn-wide" id="btn-leaders">ТАБЛИЦА ЛИДЕРОВ 🏆</button>
-            <button class="btn btn-ghost btn-wide" id="btn-settings">НАСТРОЙКИ ⚙</button>
+            <button class="btn btn-launch btn-wide" id="btn-play" data-i18n="play">ИГРАТЬ ▶</button>
+            <button class="btn btn-ghost btn-wide" id="btn-leaders" data-i18n="leaders_btn">ТАБЛИЦА ЛИДЕРОВ 🏆</button>
+            <button class="btn btn-ghost btn-wide" id="btn-settings" data-i18n="settings_btn">НАСТРОЙКИ ⚙</button>
         </div>
     </div>
 
     <!-- Настройки -->
     <div id="screen-settings" class="screen hidden">
-        <div class="header-title">Настройки</div>
+        <div class="header-title" data-i18n="settings_title">Настройки</div>
         <div class="upgrades-list">
             <div class="setting-card">
-                <div class="setting-head"><span>🎵 Музыка</span><b id="set-music-val">70%</b></div>
+                <div class="setting-head"><span data-i18n="music">🎵 Музыка</span><b id="set-music-val">70%</b></div>
                 <input type="range" id="set-music" min="0" max="100" step="5">
             </div>
             <div class="setting-card">
-                <div class="setting-head"><span>🔊 Звуки игры</span><b id="set-sfx-val">80%</b></div>
+                <div class="setting-head"><span data-i18n="sfx">🔊 Звуки игры</span><b id="set-sfx-val">80%</b></div>
                 <input type="range" id="set-sfx" min="0" max="100" step="5">
             </div>
             <div class="setting-card">
-                <div class="setting-head"><span>Весь звук</span></div>
+                <div class="setting-head"><span data-i18n="all_sound">Весь звук</span></div>
                 <button class="btn btn-ghost" id="set-mute">ВКЛЮЧЕН</button>
             </div>
+            <div class="setting-card">
+                <div class="setting-head"><span data-i18n="language">🌐 Язык</span></div>
+                <div class="lang-list" id="lang-list"></div>
+            </div>
         </div>
-        <button class="btn btn-launch" id="btn-settings-back">← НАЗАД</button>
+        <button class="btn btn-launch" id="btn-settings-back" data-i18n="back">← НАЗАД</button>
     </div>
 
     <!-- Таблица лидеров -->
     <div id="screen-leaders" class="screen hidden">
         <div>
-            <div class="header-title">Таблица лидеров</div>
-            <div class="logo-sub" style="text-align:center;margin-top:6px;">ГЛУБИНА ЗАБОЯ</div>
+            <div class="header-title" data-i18n="leaders_title">Таблица лидеров</div>
+            <div class="logo-sub" style="text-align:center;margin-top:6px;" data-i18n="leaders_sub">ГЛУБИНА ЗАБОЯ</div>
         </div>
         <div class="upgrades-list" id="leaders-list"></div>
-        <button class="btn btn-launch" id="btn-leaders-back">← НАЗАД</button>
+        <button class="btn btn-launch" id="btn-leaders-back" data-i18n="back">← НАЗАД</button>
     </div>
 
     <!-- Пауза -->
     <div id="screen-pause" class="screen pause-screen hidden">
-        <div class="header-title">Пауза</div>
+        <div class="header-title" data-i18n="pause_title">Пауза</div>
         <div class="pause-box">
-            <button class="btn btn-launch" id="btn-resume">ПРОДОЛЖИТЬ ▶</button>
-            <button class="btn btn-ghost" id="btn-pause-settings">НАСТРОЙКИ ⚙</button>
-            <button class="btn btn-danger" id="btn-quit">ВЫЙТИ В МЕНЮ</button>
+            <button class="btn btn-launch" id="btn-resume" data-i18n="resume">ПРОДОЛЖИТЬ ▶</button>
+            <button class="btn btn-ghost" id="btn-pause-settings" data-i18n="settings_btn">НАСТРОЙКИ ⚙</button>
+            <button class="btn btn-danger" id="btn-quit" data-i18n="quit">ВЫЙТИ В МЕНЮ</button>
         </div>
     </div>
 
     <!-- Кузница / Хаб -->
     <div id="screen-hub" class="screen hidden">
         <div>
-            <div class="header-title">Кузница шахтёра</div>
+            <div class="header-title" data-i18n="forge_title">Кузница шахтёра</div>
             <div class="wallet-display" id="hub-coins">🪙 0</div>
             <div class="tabs">
-                <div class="tab-btn active" id="tab-gear" onclick="switchTab('gear')">⛏️ Кирки</div>
-                <div class="tab-btn" id="tab-ench" onclick="switchTab('ench')">✨ Чары</div>
-                <div class="tab-btn" id="tab-pass" onclick="switchTab('pass')">🏗️ Шахта</div>
-                <div class="tab-btn" id="tab-ads" onclick="switchTab('ads')">📺 Бонусы</div>
+                <div class="tab-btn active" id="tab-gear" onclick="switchTab('gear')" data-i18n="tab_gear">⛏️ Кирки</div>
+                <div class="tab-btn" id="tab-ench" onclick="switchTab('ench')" data-i18n="tab_ench">✨ Чары</div>
+                <div class="tab-btn" id="tab-pass" onclick="switchTab('pass')" data-i18n="tab_pass">🏗️ Шахта</div>
+                <div class="tab-btn" id="tab-ads" onclick="switchTab('ads')" data-i18n="tab_ads">📺 Бонусы</div>
+                <div class="tab-btn" id="tab-shop" onclick="switchTab('shop')" data-i18n="tab_shop">💎 Донат</div>
             </div>
         </div>
 
         <div class="upgrades-list" id="hub-upgrades-list"></div>
 
-        <div class="bottom-row"><button class="btn btn-ghost" id="btn-hub-menu">← МЕНЮ</button><button class="btn btn-launch" id="btn-start-run">В ЗАБОЙ ⛏️</button></div>
+        <div class="bottom-row"><button class="btn btn-ghost" id="btn-hub-menu" data-i18n="hub_menu">← МЕНЮ</button><button class="btn btn-launch" id="btn-start-run" data-i18n="hub_start">В ЗАБОЙ ⛏️</button></div>
     </div>
 
     <!-- Итоги забега -->
@@ -533,23 +547,40 @@
         <div>
             <div class="header-title" id="go-title">Кирка затупилась</div>
             <div class="summary-box">
-                <div class="summary-row"><span>Достигнутая глубина:</span><b id="res-depth">0 м</b></div>
-                <div class="summary-row"><span>Добыто руды:</span><b id="res-mined">+0 🪙</b></div>
-                <div class="summary-row"><span>Лучшее комбо:</span><b id="res-combo">×1</b></div>
-                <div class="summary-row"><span>Доход шахтёров:</span><b id="res-passive">+0 🪙</b></div>
-                <div class="new-record hidden" id="res-record">🏆 Новый рекорд глубины!</div>
+                <div class="summary-row"><span data-i18n="res_depth">Достигнутая глубина:</span><b id="res-depth">0 м</b></div>
+                <div class="summary-row"><span data-i18n="res_mined">Добыто руды:</span><b id="res-mined">+0 🪙</b></div>
+                <div class="summary-row"><span data-i18n="res_combo">Лучшее комбо:</span><b id="res-combo">×1</b></div>
+                <div class="summary-row"><span data-i18n="res_passive">Доход шахтёров:</span><b id="res-passive">+0 🪙</b></div>
+                <div class="new-record hidden" id="res-record" data-i18n="new_record">🏆 Новый рекорд глубины!</div>
             </div>
         </div>
-        <div class="stack"><button class="btn btn-launch" id="btn-back-hub">В КУЗНИЦУ</button><button class="btn btn-ghost" id="btn-go-menu">В ГЛАВНОЕ МЕНЮ</button></div>
+        <div class="stack"><button class="btn hidden" id="btn-double">📺 УДВОИТЬ ДОБЫЧУ</button><button class="btn btn-launch" id="btn-back-hub" data-i18n="to_forge">В КУЗНИЦУ</button><button class="btn btn-ghost" id="btn-go-menu" data-i18n="to_menu">В ГЛАВНОЕ МЕНЮ</button></div>
+    </div>
+
+    <div id="revive-overlay" class="screen pause-screen hidden" style="z-index:55;">
+        <div class="pause-box" style="text-align:center;">
+            <div class="header-title" id="revive-title">Кирка сломалась!</div>
+            <div class="u-desc" id="revive-text" style="font-size:15px;color:#fff;"></div>
+            <button class="btn btn-launch" id="revive-yes" data-i18n="revive_yes">📺 ПРОДОЛЖИТЬ · 30% ПРОЧНОСТИ</button>
+            <button class="btn btn-ghost" id="revive-no" data-i18n="revive_no">НЕТ, СПАСИБО</button>
+        </div>
+    </div>
+
+    <div id="adv-warn" class="screen pause-screen hidden" style="z-index:70;">
+        <div class="pause-box" style="text-align:center;">
+            <div class="header-title" data-i18n="ad_title">📺 Реклама</div>
+            <div class="u-desc" style="font-size:14px;color:#fff;" data-i18n="ad_warn">Через пару секунд короткий ролик</div>
+            <div class="wallet-display" id="adv-warn-n">2</div>
+        </div>
     </div>
 
     <div id="ad-overlay" class="screen pause-screen hidden" style="z-index:60;">
         <div class="pause-box" style="text-align:center;">
-            <div class="header-title">📺 Реклама</div>
-            <div class="u-desc" style="font-size:14px;">Здесь будет рекламный ролик. Сейчас это заглушка для проверки: подождите пару секунд.</div>
+            <div class="header-title" data-i18n="ad_title">📺 Реклама</div>
+            <div class="u-desc" style="font-size:14px;" data-i18n="ad_stub">Здесь будет рекламный ролик. Сейчас это заглушка для проверки: подождите пару секунд.</div>
             <div class="wallet-display" id="ad-timer">3</div>
-            <button class="btn btn-launch" id="ad-claim" disabled>ПОЛУЧИТЬ НАГРАДУ</button>
-            <button class="btn btn-ghost" id="ad-cancel">ЗАКРЫТЬ</button>
+            <button class="btn btn-launch" id="ad-claim" data-i18n="ad_claim" disabled>ПОЛУЧИТЬ НАГРАДУ</button>
+            <button class="btn btn-ghost" id="ad-cancel" data-i18n="ad_close">ЗАКРЫТЬ</button>
         </div>
     </div>
 
@@ -560,9 +591,235 @@
 // ============================================================
 //  ЗВУК И АТМОСФЕРНЫЙ ЭМБИЕНТ
 // ============================================================
+// ============================================================
+//  ЛОКАЛИЗАЦИЯ (ru / en / tr). Язык берётся из Яндекс SDK: ysdk.environment.i18n.lang
+//  До загрузки SDK используется язык браузера; для проверки можно добавить ?lang=en или ?lang=tr
+// ============================================================
+const I18N_SRC = {
+    // --- меню / общее ---
+    pause_aria: ["Пауза", "Pause", "Duraklat", "Pausa", "إيقاف مؤقت"],
+    slam_aria: ["Слэм", "Slam", "Slam", "Golpe", "ضربة"],
+    slam: ["СЛЭМ", "SLAM", "SLAM", "GOLPE", "ضربة"],
+    menu_sub: ["ГЛУБОКАЯ ШАХТА", "DEEP MINE", "DERİN MADEN", "MINA PROFUNDA", "منجم عميق"],
+    play: ["ИГРАТЬ ▶", "PLAY ▶", "OYNA ▶", "JUGAR ▶", "العب ▶"],
+    leaders_btn: ["ТАБЛИЦА ЛИДЕРОВ 🏆", "LEADERBOARD 🏆", "LİDER TABLOSU 🏆", "CLASIFICACIÓN 🏆", "لوحة المتصدرين 🏆"],
+    settings_btn: ["НАСТРОЙКИ ⚙", "SETTINGS ⚙", "AYARLAR ⚙", "AJUSTES ⚙", "الإعدادات ⚙"],
+    settings_title: ["Настройки", "Settings", "Ayarlar", "Ajustes", "الإعدادات"],
+    music: ["🎵 Музыка", "🎵 Music", "🎵 Müzik", "🎵 Música", "🎵 الموسيقى"],
+    sfx: ["🔊 Звуки игры", "🔊 Sound effects", "🔊 Oyun sesleri", "🔊 Efectos de sonido", "🔊 المؤثرات الصوتية"],
+    all_sound: ["Весь звук", "All sound", "Tüm ses", "Todo el sonido", "كل الأصوات"],
+    on: ["ВКЛЮЧЕН", "ON", "AÇIK", "ACTIVADO", "مفعّل"],
+    off: ["ВЫКЛЮЧЕН", "OFF", "KAPALI", "DESACTIVADO", "متوقف"],
+    back: ["← НАЗАД", "← BACK", "← GERİ", "← VOLVER", "← رجوع"],
+    leaders_title: ["Таблица лидеров", "Leaderboard", "Lider Tablosu", "Clasificación", "لوحة المتصدرين"],
+    leaders_sub: ["ГЛУБИНА ЗАБОЯ", "MINING DEPTH", "MADEN DERİNLİĞİ", "PROFUNDIDAD MINADA", "عمق التعدين"],
+    pause_title: ["Пауза", "Paused", "Duraklatıldı", "Pausa", "متوقف مؤقتًا"],
+    resume: ["ПРОДОЛЖИТЬ ▶", "RESUME ▶", "DEVAM ▶", "CONTINUAR ▶", "متابعة ▶"],
+    quit: ["ВЫЙТИ В МЕНЮ", "QUIT TO MENU", "MENÜYE ÇIK", "SALIR AL MENÚ", "الخروج إلى القائمة"],
+    quit_confirm: ["ТОЧНО ВЫЙТИ?", "REALLY QUIT?", "EMİN MİSİN?", "¿SEGURO?", "هل أنت متأكد؟"],
+    forge_title: ["Кузница шахтёра", "Miner's Forge", "Madenci Demirhanesi", "Forja del minero", "ورشة المنجمي"],
+    tab_gear: ["⛏️ Кирки", "⛏️ Picks", "⛏️ Kazmalar", "⛏️ Picos", "⛏️ المعاول"],
+    tab_ench: ["✨ Чары", "✨ Enchants", "✨ Büyüler", "✨ Encantos", "✨ السحر"],
+    tab_pass: ["🏗️ Шахта", "🏗️ Mine", "🏗️ Maden", "🏗️ Mina", "🏗️ المنجم"],
+    tab_ads: ["📺 Бонусы", "📺 Bonuses", "📺 Bonuslar", "📺 Bonos", "📺 المكافآت"],
+    tab_shop: ["💎 Донат", "💎 Shop", "💎 Mağaza", "💎 Tienda", "💎 المتجر"],
+    hub_menu: ["← МЕНЮ", "← MENU", "← MENÜ", "← MENÚ", "← القائمة"],
+    hub_start: ["В ЗАБОЙ ⛏️", "TO THE MINE ⛏️", "MADENE ⛏️", "¡A LA MINA! ⛏️", "إلى المنجم ⛏️"],
+    unit_m: ["м", "m", "m", "m", "م"],
+    unit_s: ["с", "s", "sn", "s", "ث"],
+    player: ["Игрок", "Player", "Oyuncu", "Jugador", "لاعب"],
+    you: ["Вы", "You", "Sen", "Tú", "أنت"],
+    you_paren: ["(вы)", "(you)", "(sen)", "(tú)", "(أنت)"],
+
+    // --- итоги забега ---
+    go_dull: ["Кирка затупилась", "Pickaxe went dull", "Kazma köreldi", "El pico se desafiló", "فقد المعول حدّته"],
+    go_stick: ["Палка сломалась", "Stick broke", "Sopa kırıldı", "El palo se rompió", "انكسرت العصا"],
+    go_lava: ["Кирка сгорела в лаве 🔥", "Pickaxe burned in lava 🔥", "Kazma lavda yandı 🔥", "El pico se quemó en la lava 🔥", "احترق المعول في الحمم 🔥"],
+    go_stick_lava: ["Палка сгорела в лаве 🔥", "Stick burned in lava 🔥", "Sopa lavda yandı 🔥", "El palo se quemó en la lava 🔥", "احترقت العصا في الحمم 🔥"],
+    res_depth: ["Достигнутая глубина:", "Depth reached:", "Ulaşılan derinlik:", "Profundidad alcanzada:", "العمق الذي وصلت إليه:"],
+    res_mined: ["Добыто руды:", "Ore mined:", "Çıkarılan cevher:", "Mineral extraído:", "الخام المستخرج:"],
+    res_combo: ["Лучшее комбо:", "Best combo:", "En iyi kombo:", "Mejor combo:", "أفضل كومبو:"],
+    res_passive: ["Доход шахтёров:", "Miners' income:", "Madencilerin geliri:", "Ingresos de los mineros:", "دخل عمال المناجم:"],
+    new_record: ["🏆 Новый рекорд глубины!", "🏆 New depth record!", "🏆 Yeni derinlik rekoru!", "🏆 ¡Nuevo récord de profundidad!", "🏆 رقم قياسي جديد للعمق!"],
+    double_amt: ["📺 УДВОИТЬ ДОБЫЧУ (+{n} 🪙)", "📺 DOUBLE THE LOOT (+{n} 🪙)", "📺 KAZANCI İKİYE KATLA (+{n} 🪙)", "📺 DUPLICAR BOTÍN (+{n} 🪙)", "📺 ضاعف الغنيمة (+{n} 🪙)"],
+    to_forge: ["В КУЗНИЦУ", "TO THE FORGE", "DEMİRHANEYE", "A LA FORJA", "إلى الورشة"],
+    to_menu: ["В ГЛАВНОЕ МЕНЮ", "MAIN MENU", "ANA MENÜ", "MENÚ PRINCIPAL", "القائمة الرئيسية"],
+    toast_doubled: ["Добыча удвоена: +{n} 🪙", "Loot doubled: +{n} 🪙", "Kazanç ikiye katlandı: +{n} 🪙", "Botín duplicado: +{n} 🪙", "تضاعفت الغنيمة: +{n} 🪙"],
+
+    // --- воскрешение и реклама ---
+    revive_pick: ["Кирка сломалась!", "Pickaxe broke!", "Kazma kırıldı!", "¡El pico se rompió!", "انكسر المعول!"],
+    revive_stick: ["Палка сломалась!", "Stick broke!", "Sopa kırıldı!", "¡El palo se rompió!", "انكسرت العصا!"],
+    revive_lava: ["Сгорела в лаве!", "Burned in lava!", "Lavda yandı!", "¡Te quemaste en la lava!", "احترقت في الحمم!"],
+    revive_text_gap: ["До рекорда всего {n} м! Продолжить забой с 30% прочности?", "Only {n} m to your record! Continue mining with 30% durability?", "Rekora sadece {n} m kaldı! %30 dayanıklılıkla devam edilsin mi?", "¡Solo {n} m para tu récord! ¿Seguir minando con 30% de durabilidad?", "تبقّى {n} م فقط على رقمك القياسي! هل تتابع التعدين بمتانة 30%؟"],
+    revive_text_depth: ["Вы на глубине {n} м. Продолжить забой с 30% прочности?", "You're {n} m deep. Continue mining with 30% durability?", "{n} m derinliktesin. %30 dayanıklılıkla devam edilsin mi?", "Estás a {n} m de profundidad. ¿Seguir minando con 30% de durabilidad?", "أنت على عمق {n} م. هل تتابع التعدين بمتانة 30%؟"],
+    revive_yes: ["📺 ПРОДОЛЖИТЬ · 30% ПРОЧНОСТИ", "📺 CONTINUE · 30% DURABILITY", "📺 DEVAM ET · %30 DAYANIKLILIK", "📺 CONTINUAR · 30% DE DURABILIDAD", "📺 متابعة · متانة 30%"],
+    revive_no: ["НЕТ, СПАСИБО", "NO, THANKS", "HAYIR, TEŞEKKÜRLER", "NO, GRACIAS", "لا، شكرًا"],
+    ad_title: ["📺 Реклама", "📺 Advertisement", "📺 Reklam", "📺 Anuncio", "📺 إعلان"],
+    ad_warn: ["Через пару секунд короткий ролик", "A short video starts in a couple of seconds", "Birkaç saniye içinde kısa bir video başlayacak", "En un par de segundos empieza un vídeo corto", "سيبدأ فيديو قصير بعد ثوانٍ"],
+    ad_stub: ["Здесь будет рекламный ролик. Сейчас это заглушка для проверки: подождите пару секунд.", "A video ad will play here. This is a test placeholder: wait a couple of seconds.", "Burada bir reklam videosu oynayacak. Şu an test amaçlı bir yer tutucu: birkaç saniye bekleyin.", "Aquí se mostrará un anuncio en vídeo. Es un marcador de prueba: espera un par de segundos.", "سيظهر هنا إعلان فيديو. هذا عنصر تجريبي مؤقت: انتظر بضع ثوانٍ."],
+    ad_claim: ["ПОЛУЧИТЬ НАГРАДУ", "CLAIM REWARD", "ÖDÜLÜ AL", "RECLAMAR RECOMPENSA", "استلم المكافأة"],
+    ad_close: ["ЗАКРЫТЬ", "CLOSE", "KAPAT", "CERRAR", "إغلاق"],
+    toast_ad_fail: ["Реклама сейчас недоступна, попробуйте позже", "Ads are unavailable right now, try again later", "Reklam şu anda kullanılamıyor, daha sonra tekrar dene", "Los anuncios no están disponibles ahora, inténtalo más tarde", "الإعلانات غير متاحة حاليًا، حاول لاحقًا"],
+
+    // --- игровые надписи ---
+    f_pop: ["ЛОПНУЛ!", "POP!", "PATLADI!", "¡POP!", "فرقعة!"],
+    f_crit: ["КРИТ!", "CRIT!", "KRİTİK!", "¡CRÍTICO!", "ضربة حرجة!"],
+    f_lava: ["ЛАВА!", "LAVA!", "LAV!", "¡LAVA!", "حمم!"],
+    f_endchest: ["СУНДУК КРАЯ!", "END CHEST!", "END SANDIĞI!", "¡COFRE DEL END!", "صندوق الإند!"],
+    f_boom: ["БА-БАХ!", "BOOM!", "BUM!", "¡BUM!", "بوم!"],
+    f_revive: ["ВОСКРЕШЕНИЕ!", "REVIVED!", "DİRİLDİN!", "¡REVIVIDO!", "عدت للحياة!"],
+    f_bench_up: ["⚡ КИРКА УСИЛЕНА · 10 с", "⚡ PICKAXE BOOSTED · 10 s", "⚡ KAZMA GÜÇLENDİ · 10 sn", "⚡ PICO POTENCIADO · 10 s", "⚡ تعزيز المعول · 10 ث"],
+    f_bench_dur: ["🛠 +30 ПРОЧНОСТИ", "🛠 +30 DURABILITY", "🛠 +30 DAYANIKLILIK", "🛠 +30 DURABILIDAD", "🛠 +30 متانة"],
+    f_bench_mini: ["⛏ МИНИ-КИРКА РЯДОМ", "⛏ MINI PICKAXE NEARBY", "⛏ MİNİ KAZMA YANINDA", "⛏ MINIPICO CERCA", "⛏ معول صغير بجانبك"],
+    f_fire: ["🔥 ОГНЕННАЯ КИРКА!", "🔥 FIRE PICKAXE!", "🔥 ATEŞ KAZMASI!", "🔥 ¡PICO DE FUEGO!", "🔥 معول النار!"],
+    aim_hint: ["Оттяни и отпусти", "Pull back and release", "Geri çek ve bırak", "Tira hacia atrás y suelta", "اسحب ثم أفلت"],
+    toast_lava_warn: ["🔥 Ниже — лава! Она мгновенно сжигает кирку", "🔥 Lava below! It instantly burns your pickaxe", "🔥 Aşağıda lav var! Kazmayı anında yakar", "🔥 ¡Hay lava abajo! Quema el pico al instante", "🔥 توجد حمم في الأسفل! تحرق المعول فورًا"],
+    toast_boosts: ["Бонусы: {list}", "Bonuses: {list}", "Bonuslar: {list}", "Bonos: {list}", "المكافآت: {list}"],
+    b_fire: ["🔥 Огненная кирка", "🔥 Fire Pickaxe", "🔥 Ateş Kazması", "🔥 Pico de fuego", "🔥 معول النار"],
+    b_coin: ["💰 ×1,5 монет", "💰 ×1.5 coins", "💰 ×1,5 jeton", "💰 monedas ×1,5", "💰 عملات ×1.5"],
+    b_dur: ["🧰 +25% прочности", "🧰 +25% durability", "🧰 %25 dayanıklılık", "🧰 +25% de durabilidad", "🧰 متانة +25%"],
+    toast_offline: ["Шахтёры добыли, пока вас не было: +{n} 🪙", "Miners dug while you were away: +{n} 🪙", "Sen yokken madenciler kazdı: +{n} 🪙", "Los mineros trabajaron mientras no estabas: +{n} 🪙", "عمل المنقّبون أثناء غيابك: +{n} 🪙"],
+
+    // --- кирки ---
+    tier_stick: ["Палка", "Stick", "Sopa", "Palo", "عصا"],
+    tier_wood: ["Деревянная", "Wooden", "Ahşap", "De madera", "خشبي"],
+    tier_stone: ["Каменная", "Stone", "Taş", "De piedra", "حجري"],
+    tier_iron: ["Железная", "Iron", "Demir", "De hierro", "حديدي"],
+    tier_gold: ["Золотая", "Golden", "Altın", "De oro", "ذهبي"],
+    tier_diamond: ["Алмазная", "Diamond", "Elmas", "De diamante", "ماسي"],
+    tier_netherite: ["Незеритовая", "Netherite", "Netherit", "De netherita", "نيذرايت"],
+    tier_ench_netherite: ["Зачарованный незерит", "Enchanted Netherite", "Büyülü Netherit", "De netherita encantada", "نيذرايت مسحور"],
+    gear_desc: ["Урон {p} · прочность {d}", "Damage {p} · durability {d}", "Hasar {p} · dayanıklılık {d}", "Daño {p} · durabilidad {d}", "الضرر {p} · المتانة {d}"],
+    gear_equipped: ["Сейчас в руке", "In hand", "Elde", "En la mano", "في اليد"],
+    gear_owned: ["Куплена", "Owned", "Satın alındı", "Comprado", "مملوك"],
+    btn_equipped: ["В РУКЕ", "EQUIPPED", "ELDE", "EN MANO", "في اليد"],
+    btn_equip: ["ВЗЯТЬ", "EQUIP", "KUŞAN", "EQUIPAR", "جهّز"],
+    btn_buy: ["КУПИТЬ", "BUY", "AL", "COMPRAR", "اشترِ"],
+
+    // --- чары и шахта ---
+    ench_unbreaking: ["Прочность", "Durability", "Dayanıklılık", "Durabilidad", "المتانة"],
+    ench_unbreaking_info: ["+{a} к запасу, {b}% не тратить удар", "+{a} reserve, {b}% chance to save a hit", "+{a} yedek, vuruşu koruma şansı %{b}", "+{a} de reserva, {b}% de no gastar el golpe", "+{a} احتياطي، احتمال {b}% ألّا تُستهلك الضربة"],
+    ench_fortune: ["Удача", "Fortune", "Şans", "Fortuna", "الحظ"],
+    ench_fortune_info: ["Монеты ×{a}", "Coins ×{a}", "Jeton ×{a}", "Monedas ×{a}", "العملات ×{a}"],
+    ench_efficiency: ["Эффективность", "Efficiency", "Verimlilik", "Eficiencia", "الكفاءة"],
+    ench_efficiency_info: ["Старт +{a}%, упругость {b}%", "Launch +{a}%, bounciness {b}%", "Fırlatma +%{a}, sekme %{b}", "Lanzamiento +{a}%, rebote {b}%", "الانطلاق +{a}%، الارتداد {b}%"],
+    ench_pyro: ["Пиротехника", "Pyrotechnics", "Piroteknik", "Pirotecnia", "الألعاب النارية"],
+    ench_pyro_info: ["Радиус взрыва TNT: {a}", "TNT blast radius: {a}", "TNT patlama yarıçapı: {a}", "Radio de explosión de TNT: {a}", "نطاق انفجار TNT: {a}"],
+    ench_slam: ["Громовой слэм", "Thunder Slam", "Gök Gürültüsü Slam", "Golpe trueno", "ضربة الرعد"],
+    ench_slam_info: ["Перезарядка {a} с", "Cooldown {a} s", "Bekleme süresi {a} sn", "Recarga {a} s", "إعادة الشحن {a} ث"],
+    ench_crit: ["Критический удар", "Critical Hit", "Kritik Vuruş", "Golpe crítico", "الضربة الحرجة"],
+    ench_crit_info: ["Шанс ×3 урона: {a}%", "Chance of ×3 damage: {a}%", "×3 hasar şansı: %{a}", "Probabilidad de daño ×3: {a}%", "احتمال ضرر ×3: {a}%"],
+    ench_miner: ["Авто-шахтёры", "Auto Miners", "Oto Madenciler", "Mineros automáticos", "عمال تعدين آليون"],
+    ench_miner_0: ["Приносят монеты, даже пока вы спите", "Earn coins even while you sleep", "Sen uyurken bile jeton kazandırırlar", "Ganan monedas incluso mientras duermes", "يكسبون العملات حتى وأنت نائم"],
+    ench_miner_info: ["{a} 🪙/с в игре, {b} 🪙/с офлайн", "{a} 🪙/s in game, {b} 🪙/s offline", "Oyunda {a} 🪙/sn, çevrimdışı {b} 🪙/sn", "{a} 🪙/s en juego, {b} 🪙/s sin conexión", "{a} 🪙/ث في اللعبة، {b} 🪙/ث دون اتصال"],
+    ench_prospector: ["Гео-разведка", "Geo Survey", "Jeoloji Keşfi", "Prospección geológica", "الاستكشاف الجيولوجي"],
+    ench_prospector_0: ["Больше сундуков и редких руд", "More chests and rare ores", "Daha fazla sandık ve nadir cevher", "Más cofres y minerales raros", "المزيد من الصناديق والخامات النادرة"],
+    ench_prospector_info: ["Сундуки +{a}%, редкие жилы +{b}%", "Chests +{a}%, rare veins +{b}%", "Sandıklar +%{a}, nadir damarlar +%{b}", "Cofres +{a}%, vetas raras +{b}%", "الصناديق +{a}%، العروق النادرة +{b}%"],
+    level_of: ["Уровень {l}/{m}", "Level {l}/{m}", "Seviye {l}/{m}", "Nivel {l}/{m}", "المستوى {l}/{m}"],
+    level_max: [" · максимум", " · max", " · maks", " · máximo", " · الحد الأقصى"],
+    verb_up: ["ПРОКАЧАТЬ", "LEVEL UP", "GELİŞTİR", "SUBIR", "ارفع"],
+    verb_hire: ["НАНЯТЬ", "HIRE", "İŞE AL", "CONTRATAR", "وظّف"],
+    verb_better: ["УЛУЧШИТЬ", "UPGRADE", "YÜKSELT", "MEJORAR", "طوّر"],
+    btn_max: ["МАКС", "MAX", "MAKS", "MÁX", "الأقصى"],
+
+    // --- бонусы за рекламу и подарок ---
+    ads_note: ["За рекламу бонус действует один забой. За 💳 он остаётся навсегда.", "A bonus from ads lasts one run. With 💳 it stays forever.", "Reklamla alınan bonus bir kazı sürer. 💳 ile kalıcı olur.", "Un bono por anuncio dura una partida. Con 💳 es permanente.", "مكافأة الإعلان تدوم جولة واحدة. مع 💳 تبقى للأبد."],
+    ad_fire_desc: ["Первые 2,5 с забоя кирка летит строго вниз и крушит всё: монеты ×0,3, прочность не тратится, лава не страшна", "For the first 2.5 s of a run the pickaxe flies straight down smashing everything: coins ×0.3, no durability loss, lava can't hurt it", "Kazı başlarken ilk 2,5 sn kazma düz aşağı uçar ve her şeyi parçalar: jeton ×0,3, dayanıklılık harcanmaz, lavdan etkilenmez", "Durante los primeros 2,5 s el pico cae recto destrozándolo todo: monedas ×0,3, sin gastar durabilidad, inmune a la lava", "خلال أول 2.5 ثانية يسقط المعول مباشرة محطّمًا كل شيء: العملات ×0.3، لا تُستهلك المتانة، ولا تؤذيه الحمم"],
+    ad_coin_desc: ["Монеты ×1,5 в следующем забое", "Coins ×1.5 on your next run", "Sonraki kazıda jeton ×1,5", "Monedas ×1,5 en la próxima partida", "العملات ×1.5 في الجولة القادمة"],
+    ad_dur_desc: ["+25% прочности в следующем забое", "+25% durability on your next run", "Sonraki kazıda %25 dayanıklılık", "+25% de durabilidad en la próxima partida", "متانة +25% في الجولة القادمة"],
+    watch: ["СМОТРЕТЬ", "WATCH", "İZLE", "VER", "شاهد"],
+    forever: ["НАВСЕГДА ✓", "FOREVER ✓", "KALICI ✓", "PERMANENTE ✓", "للأبد ✓"],
+    ready: ["ГОТОВО ✓", "READY ✓", "HAZIR ✓", "LISTO ✓", "جاهز ✓"],
+    daily_title: ["Ежедневный подарок", "Daily gift", "Günlük hediye", "Regalo diario", "الهدية اليومية"],
+    daily_ready: ["День {day}: +{n} 🪙", "Day {day}: +{n} 🪙", "Gün {day}: +{n} 🪙", "Día {day}: +{n} 🪙", "اليوم {day}: +{n} 🪙"],
+    daily_done: ["Сегодня подарок уже получен, приходите завтра", "Today's gift is already claimed, come back tomorrow", "Bugünün hediyesi alındı, yarın tekrar gel", "El regalo de hoy ya está reclamado, vuelve mañana", "تم استلام هدية اليوم، عُد غدًا"],
+    daily_note: ["Награда растёт до 7-го дня подряд.", "The reward grows up to 7 days in a row.", "Ödül üst üste 7. güne kadar artar.", "La recompensa crece hasta 7 días seguidos.", "تزداد المكافأة حتى 7 أيام متتالية."],
+    daily_claim: ["ЗАБРАТЬ", "CLAIM", "AL", "RECLAMAR", "استلم"],
+    daily_tomorrow: ["ЗАВТРА", "TOMORROW", "YARIN", "MAÑANA", "غدًا"],
+    toast_gift: ["Подарок: +{n} 🪙", "Gift: +{n} 🪙", "Hediye: +{n} 🪙", "Regalo: +{n} 🪙", "هدية: +{n} 🪙"],
+
+    // --- магазин ---
+    shop_note: ["Покупки через Яндекс Игры. Бонусы из магазина работают навсегда, в каждом забое.", "Purchases via Yandex Games. Shop bonuses are permanent and apply to every run.", "Satın alımlar Yandex Games üzerinden yapılır. Mağaza bonusları kalıcıdır ve her kazıda geçerlidir.", "Compras a través de Yandex Games. Los bonos de la tienda son permanentes y valen en cada partida.", "المشتريات عبر Yandex Games. مكافآت المتجر دائمة وتعمل في كل جولة."],
+    bought: ["КУПЛЕНО ✓", "OWNED ✓", "ALINDI ✓", "COMPRADO ✓", "تم الشراء ✓"],
+    prod_no_ads_t: ["Отключить рекламу", "Remove ads", "Reklamları kaldır", "Quitar anuncios", "إزالة الإعلانات"],
+    prod_no_ads_d: ["Навсегда убирает рекламу между забоями. Видео за награду остаётся по желанию", "Permanently removes ads between runs. Rewarded videos stay optional", "Kazılar arasındaki reklamları kalıcı olarak kaldırır. Ödüllü videolar isteğe bağlı kalır", "Elimina para siempre los anuncios entre partidas. Los vídeos con recompensa siguen siendo opcionales", "يزيل الإعلانات بين الجولات نهائيًا. تبقى فيديوهات المكافآت اختيارية"],
+    prod_boost_pack_t: ["Набор шахтёра", "Miner's Pack", "Madenci Paketi", "Pack del minero", "حزمة المنجمي"],
+    prod_boost_pack_d: ["Все три бонуса навсегда: действуют в каждом забое", "All three bonuses forever: active in every run", "Üç bonus da kalıcı: her kazıda aktif", "Los tres bonos para siempre: activos en cada partida", "المكافآت الثلاث للأبد: مفعّلة في كل جولة"],
+    prod_boost_fire_t: ["Огненная кирка", "Fire Pickaxe", "Ateş Kazması", "Pico de fuego", "معول النار"],
+    prod_boost_fire_d: ["Навсегда: огненный старт в каждом забое", "Permanent: a fiery start in every run", "Kalıcı: her kazıda ateşli başlangıç", "Permanente: inicio ardiente en cada partida", "دائم: بداية ملتهبة في كل جولة"],
+    prod_boost_coin_t: ["Золотая лихорадка", "Gold Rush", "Altın Hummasu", "Fiebre del oro", "حمّى الذهب"],
+    prod_boost_coin_d: ["Навсегда: монеты ×1,5 в каждом забое", "Permanent: coins ×1.5 in every run", "Kalıcı: her kazıda jeton ×1,5", "Permanente: monedas ×1,5 en cada partida", "دائم: عملات ×1.5 في كل جولة"],
+    prod_boost_dur_t: ["Запасная кирка", "Spare Pickaxe", "Yedek Kazma", "Pico de repuesto", "معول احتياطي"],
+    prod_boost_dur_d: ["Навсегда: +25% прочности в каждом забое", "Permanent: +25% durability in every run", "Kalıcı: her kazıda %25 dayanıklılık", "Permanente: +25% de durabilidad en cada partida", "دائم: متانة +25% في كل جولة"],
+    prod_coins_s_t: ["Мешок монет", "Bag of Coins", "Jeton Çantası", "Bolsa de monedas", "كيس عملات"],
+    prod_coins_s_d: ["+5 000 🪙", "+5,000 🪙", "+5.000 🪙", "+5.000 🪙", "+5,000 🪙"],
+    prod_coins_m_t: ["Сундук монет", "Chest of Coins", "Jeton Sandığı", "Cofre de monedas", "صندوق عملات"],
+    prod_coins_m_d: ["+30 000 🪙", "+30,000 🪙", "+30.000 🪙", "+30.000 🪙", "+30,000 🪙"],
+    prod_coins_l_t: ["Казна гнома", "Dwarf's Treasury", "Cüce Hazinesi", "Tesoro del enano", "كنز القزم"],
+    prod_coins_l_d: ["+150 000 🪙", "+150,000 🪙", "+150.000 🪙", "+150.000 🪙", "+150,000 🪙"],
+    toast_restored: ["Покупка восстановлена: {name}", "Purchase restored: {name}", "Satın alım geri yüklendi: {name}", "Compra restaurada: {name}", "تمت استعادة الشراء: {name}"],
+    toast_test_buy: ["Тест вне Яндекса, без списания: {name}", "Test outside Yandex, no charge: {name}", "Yandex dışında test, ücret alınmadı: {name}", "Prueba fuera de Yandex, sin cargo: {name}", "اختبار خارج Yandex، دون خصم: {name}"],
+    toast_no_pay: ["Покупки сейчас недоступны", "Purchases are unavailable right now", "Satın alımlar şu anda kullanılamıyor", "Las compras no están disponibles ahora", "المشتريات غير متاحة حاليًا"],
+    toast_thanks: ["Спасибо за покупку! {name}", "Thanks for your purchase! {name}", "Satın aldığın için teşekkürler! {name}", "¡Gracias por tu compra! {name}", "شكرًا على الشراء! {name}"],
+    toast_pay_fail: ["Покупка не завершена", "Purchase not completed", "Satın alım tamamlanmadı", "Compra no completada", "لم تكتمل عملية الشراء"],
+
+    // --- таблица лидеров ---
+    lb_loading: ["Загрузка…", "Loading…", "Yükleniyor…", "Cargando…", "جارٍ التحميل…"],
+    lb_error: ["Не удалось загрузить таблицу. Проверьте соединение.", "Couldn't load the leaderboard. Check your connection.", "Tablo yüklenemedi. Bağlantını kontrol et.", "No se pudo cargar la clasificación. Revisa tu conexión.", "تعذّر تحميل اللوحة. تحقق من اتصالك."],
+    lb_login: ["🔑 ВОЙТИ, ЧТОБЫ ПОПАСТЬ В ТАБЛИЦУ", "🔑 LOG IN TO JOIN THE LEADERBOARD", "🔑 TABLOYA GİRMEK İÇİN GİRİŞ YAP", "🔑 INICIA SESIÓN PARA ENTRAR EN LA CLASIFICACIÓN", "🔑 سجّل الدخول لتظهر في اللوحة"],
+    lb_dive: ["Спуститесь в шахту, чтобы появиться в таблице", "Go down the mine to appear on the leaderboard", "Tabloda yer almak için madene in", "Baja a la mina para aparecer en la clasificación", "انزل إلى المنجم لتظهر في اللوحة"],
+    lb_empty: ["Пока никого нет. Будьте первым!", "Nobody here yet. Be the first!", "Henüz kimse yok. İlk sen ol!", "Aún no hay nadie. ¡Sé el primero!", "لا أحد بعد. كن الأول!"],
+    language: ["🌐 Язык", "🌐 Language", "🌐 Dil", "🌐 Idioma", "🌐 اللغة"],
+    lang_auto: ["Авто", "Auto", "Otomatik", "Automático", "تلقائي"]
+};
+
+const I18N = { lang: 'ru', auto: 'ru', dict: { ru: {}, en: {}, tr: {}, es: {}, ar: {} }, applied: false, onChange: null };
+Object.keys(I18N_SRC).forEach(k => {
+    I18N.dict.ru[k] = I18N_SRC[k][0];
+    I18N.dict.en[k] = I18N_SRC[k][1];
+    I18N.dict.tr[k] = I18N_SRC[k][2];
+    I18N.dict.es[k] = I18N_SRC[k][3];
+    I18N.dict.ar[k] = I18N_SRC[k][4];
+});
+
+function t(key, p) {
+    const d = I18N.dict[I18N.lang];
+    let s = d && d[key] !== undefined ? d[key] : (I18N.dict.en[key] !== undefined ? I18N.dict.en[key] : key);
+    if (p) s = s.replace(/\{(\w+)\}/g, (m, k) => (p[k] !== undefined ? p[k] : m));
+    return s;
+}
+// Яндекс отдаёт ISO-код языка: ru/be/kk/uk/uz → русский, tr → турецкий, es → испанский, ar → арабский, остальное → английский
+function mapLang(code) {
+    const c = String(code || '').toLowerCase().split(/[-_]/)[0];
+    if (['ru', 'be', 'kk', 'uk', 'uz'].indexOf(c) >= 0) return 'ru';
+    if (c === 'tr') return 'tr';
+    if (c === 'es') return 'es';
+    if (c === 'ar') return 'ar';
+    return 'en';
+}
+function detectLang() {
+    try {
+        const q = new URLSearchParams(location.search).get('lang');
+        if (q) return mapLang(q);
+    } catch (e) {}
+    const nl = (navigator.languages && navigator.languages[0]) || navigator.language || 'ru';
+    return mapLang(nl);
+}
+function applyLang(lang) {
+    if (!I18N.dict[lang]) lang = 'en';
+    if (I18N.applied && lang === I18N.lang) return;
+    I18N.lang = lang;
+    I18N.applied = true;
+    document.documentElement.lang = lang;
+    document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
+    document.querySelectorAll('[data-i18n]').forEach(el => { el.textContent = t(el.getAttribute('data-i18n')); });
+    document.querySelectorAll('[data-i18n-aria]').forEach(el => el.setAttribute('aria-label', t(el.getAttribute('data-i18n-aria'))));
+    if (I18N.onChange) I18N.onChange();
+}
+
 const Settings = {
     KEY: 'mine_bouncer_settings_v1',
-    music: 0.7, sfx: 0.8, muted: false,
+    music: 0.7, sfx: 0.8, muted: false, lang: 'auto',
     load() {
         try {
             const p = JSON.parse(localStorage.getItem(this.KEY) || 'null');
@@ -571,13 +828,16 @@ const Settings = {
             if (typeof p.music === 'number') this.music = c(p.music);
             if (typeof p.sfx === 'number') this.sfx = c(p.sfx);
             this.muted = !!p.muted;
+            if (['auto', 'ru', 'en', 'tr', 'es', 'ar'].indexOf(p.lang) >= 0) this.lang = p.lang;
         } catch (e) {}
     },
     save() {
-        try { localStorage.setItem(this.KEY, JSON.stringify({ music: this.music, sfx: this.sfx, muted: this.muted })); } catch (e) {}
+        try { localStorage.setItem(this.KEY, JSON.stringify({ music: this.music, sfx: this.sfx, muted: this.muted, lang: this.lang })); } catch (e) {}
     }
 };
 Settings.load();
+I18N.auto = detectLang();
+applyLang(Settings.lang !== 'auto' ? Settings.lang : I18N.auto);
 
 const AudioEngine = {
     ctx: null,
@@ -608,7 +868,7 @@ const AudioEngine = {
         if (!this.ctx) return;
         const t = this.ctx.currentTime;
         const set = (param, v) => { if (instant) param.value = v; else param.setTargetAtTime(v, t, 0.04); };
-        set(this.master.gain, Settings.muted ? 0 : 1);
+        set(this.master.gain, (Settings.muted || this.adMuted) ? 0 : 1);
         set(this.musicGain.gain, Settings.music * 0.55);
         set(this.sfxGain.gain, Settings.sfx);
     },
@@ -700,10 +960,16 @@ const AudioEngine = {
     },
     noise(dur, decay, filterType, freq, vol) {
         if (!this.ctx || !this.sfxGain) return;
-        const len = Math.floor(this.ctx.sampleRate * dur);
-        const buf = this.ctx.createBuffer(1, len, this.ctx.sampleRate);
-        const dat = buf.getChannelData(0);
-        for (let i = 0; i < len; i++) dat[i] = (Math.random() * 2 - 1) * Math.exp(-i / (len * decay));
+        const nkey = dur + '|' + decay;
+        this._nb = this._nb || {};
+        let buf = this._nb[nkey];
+        if (!buf) {
+            const len = Math.floor(this.ctx.sampleRate * dur);
+            buf = this.ctx.createBuffer(1, len, this.ctx.sampleRate);
+            const dat = buf.getChannelData(0);
+            for (let i = 0; i < len; i++) dat[i] = (Math.random() * 2 - 1) * Math.exp(-i / (len * decay));
+            this._nb[nkey] = buf;
+        }
         const src = this.ctx.createBufferSource();
         src.buffer = buf;
         const f = this.ctx.createBiquadFilter();
@@ -994,6 +1260,21 @@ function initTextures() {
         bevel(g, OBS);
     });
 
+    Textures.workbench = makeCanvas(BLOCK_W, BLOCK_H, g => {
+        const PL = ['#d9a25e', '#c68e4a', '#a97434', '#8a5c26'];
+        paintBase(g, PL, 91, 0);
+        cell(g, 1, 1, '#4a2a10', 26, 7);
+        cell(g, 2, 2, '#9a6a34', 24, 5);
+        cell(g, 2, 2, '#d9a25e', 24, 1);
+        [2, 10, 18, 25].forEach(x => cell(g, x, 2, '#3a2108', 1, 5));
+        [2, 4, 6].forEach(y => cell(g, 2, y, '#3a2108', 24, 1));
+        cell(g, 11, 3, '#9ae6ff'); cell(g, 19, 5, '#9ae6ff');
+        cell(g, 2, 9, '#6b4019', 24, 1);
+        cell(g, 4, 11, '#8f97b0', 5, 2); cell(g, 4, 11, '#e6eaf6', 5, 1); cell(g, 6, 13, '#6b4320', 1, 3);
+        cell(g, 14, 11, '#e6eaf6', 9, 2); cell(g, 14, 13, '#8f97b0', 9, 1); cell(g, 22, 11, '#6b4320', 3, 3);
+        bevel(g, PL);
+    });
+
     Textures.slime = makeCanvas(BLOCK_W, BLOCK_H, g => {
         const out = '#1c7a22', hi = '#c9ffa8', mid = '#7be85a', lo = '#46bf34';
         for (let y = 1; y < GH - 1; y++) {
@@ -1058,6 +1339,7 @@ function initTextures() {
     }
 
     const pickPalettes = {
+        stick: { head: '#c58a4a', light: '#ecc088', dark: '#87561f', detail: 'none',  glow: null },
         wood:  { head: '#c58a4a', light: '#ecc088', dark: '#87561f', detail: 'grain',  glow: null },
         stone: { head: '#9aa0b0', light: '#d4d9e6', dark: '#5d6374', detail: 'speck',  glow: null },
         iron:  { head: '#dfe4ee', light: '#ffffff', dark: '#8a93a8', detail: 'shine',  glow: 'rgba(255,255,255,0.55)' },
@@ -1080,6 +1362,13 @@ function initTextures() {
         set(11, 22, '#6b4320'); set(12, 22, '#6b4320');
         for (let y = 15; y <= 20; y += 2) { set(11, y, '#f0cf8a'); set(12, y, '#bd904a'); }
 
+        const isStick = tier === 'stick';
+        if (isStick) {
+            for (let y = 2; y <= 5; y++) { set(11, y, '#d49a58'); set(12, y, '#8f5e2c'); }
+            set(11, 2, '#f0cf8a'); set(12, 2, '#bd904a');
+            set(11, 7, '#f0cf8a'); set(12, 7, '#bd904a'); set(11, 11, '#f0cf8a'); set(12, 11, '#bd904a');
+            set(13, 9, '#8f5e2c'); set(14, 8, '#8f5e2c'); set(15, 8, '#d49a58'); set(14, 7, '#d49a58');
+        } else {
         const topY = {}, midY = {};
         for (let x = 1; x <= 22; x++) {
             const dx = (x - 11.5) / 10.5;
@@ -1098,6 +1387,7 @@ function initTextures() {
         if (pal.detail === 'gem') { [4, 7, 16, 19].forEach(x => set(x, topY[x], '#ffffff')); [6, 17].forEach(x => set(x, midY[x], '#7ffcff')); }
         if (pal.detail === 'ember') { [4, 8, 15, 19].forEach(x => set(x, midY[x], '#ff8a3d')); set(6, midY[6], '#ffd27a'); set(17, midY[17], '#ffd27a'); }
         if (pal.detail === 'magic') { [4, 8, 15, 19].forEach(x => set(x, topY[x], '#ffffff')); [6, 17].forEach(x => set(x, midY[x], '#ff9bf2')); [3, 20].forEach(x => set(x, midY[x], '#d8a8ff')); }
+        } // end !isStick
 
         const img = g.getImageData(0, 0, L, L);
         const d = img.data;
@@ -1120,8 +1410,9 @@ function initTextures() {
 //  ДАННЫЕ ИГРЫ, ЭКОНОМИКА
 // ============================================================
 const TIERS = [
-    { id: 'wood',           name: 'Деревянная',         power: 1,  maxDur: 34,  cost: 0 },
-    { id: 'stone',          name: 'Каменная',           power: 2,  maxDur: 48,  cost: 200 },
+    { id: 'stick',          name: 'Палка',              power: 1,  maxDur: 22,  cost: 0 },
+    { id: 'wood',           name: 'Деревянная',         power: 1,  maxDur: 34,  cost: 150 },
+    { id: 'stone',          name: 'Каменная',           power: 2,  maxDur: 48,  cost: 350 },
     { id: 'iron',           name: 'Железная',           power: 3,  maxDur: 66,  cost: 1200 },
     { id: 'gold',           name: 'Золотая',            power: 4,  maxDur: 86,  cost: 4600 },
     { id: 'diamond',        name: 'Алмазная',           power: 6,  maxDur: 108, cost: 13800 },
@@ -1146,32 +1437,36 @@ const Formulas = {
 const COMBO_TIMEOUT = 2.2;
 
 const ENCHANTS = [
-    { id: 'unbreaking', icon: '🛡️', title: 'Прочность',        base: 60,  growth: 1.6,  max: 10,
-      info: l => `+${Formulas.durBonus(l)} к запасу, ${Math.round(Formulas.saveChance(l) * 100)}% не тратить удар` },
-    { id: 'fortune',    icon: '🍀', title: 'Удача',             base: 90,  growth: 1.7,  max: 10,
-      info: l => `Монеты ×${Formulas.fortuneMult(l).toFixed(1)}` },
-    { id: 'efficiency', icon: '⚡', title: 'Эффективность',     base: 75,  growth: 1.6,  max: 10,
-      info: l => `Старт +${Math.round((Formulas.launchMult(l) - 1) * 100)}%, упругость ${Math.round(Formulas.elasticity(l) * 100)}%` },
-    { id: 'pyro',       icon: '🧨', title: 'Пиротехника',       base: 100,  growth: 1.65, max: 8,
-      info: l => `Радиус взрыва TNT: ${Formulas.tntRadius(l)}` },
-    { id: 'slam',       icon: '🔨', title: 'Громовой слэм',     base: 130,  growth: 1.65, max: 8,
-      info: l => `Перезарядка ${Formulas.slamCooldown(l).toFixed(1)} с` },
-    { id: 'crit',       icon: '🎯', title: 'Критический удар',  base: 150, growth: 1.7,  max: 8,
-      info: l => `Шанс ×3 урона: ${Math.round(Formulas.critChance(l) * 100)}%` }
+    { id: 'unbreaking', icon: '🛡️', get title() { return t('ench_unbreaking'); }, base: 60,  growth: 1.6,  max: 10,
+      info: l => t('ench_unbreaking_info', { a: Formulas.durBonus(l), b: Math.round(Formulas.saveChance(l) * 100) }) },
+    { id: 'fortune',    icon: '🍀', get title() { return t('ench_fortune'); }, base: 90,  growth: 1.7,  max: 10,
+      info: l => t('ench_fortune_info', { a: Formulas.fortuneMult(l).toFixed(1) }) },
+    { id: 'efficiency', icon: '⚡', get title() { return t('ench_efficiency'); }, base: 75,  growth: 1.6,  max: 10,
+      info: l => t('ench_efficiency_info', { a: Math.round((Formulas.launchMult(l) - 1) * 100), b: Math.round(Formulas.elasticity(l) * 100) }) },
+    { id: 'pyro',       icon: '🧨', get title() { return t('ench_pyro'); }, base: 100,  growth: 1.65, max: 8,
+      info: l => t('ench_pyro_info', { a: Formulas.tntRadius(l) }) },
+    { id: 'slam',       icon: '🔨', get title() { return t('ench_slam'); }, base: 130,  growth: 1.65, max: 8,
+      info: l => t('ench_slam_info', { a: Formulas.slamCooldown(l).toFixed(1) }) },
+    { id: 'crit',       icon: '🎯', get title() { return t('ench_crit'); }, base: 150, growth: 1.7,  max: 8,
+      info: l => t('ench_crit_info', { a: Math.round(Formulas.critChance(l) * 100) }) }
 ];
 const PASSIVES = [
-    { id: 'miner',      icon: '👷', title: 'Авто-шахтёры', base: 150, growth: 1.7, max: 12,
-      info: l => l === 0 ? 'Приносят монеты, даже пока вы спите' :
-                 `${Formulas.minerRate(l).toFixed(2)} 🪙/с в игре, ${Formulas.offlineRate(l).toFixed(2)} 🪙/с офлайн` },
-    { id: 'prospector', icon: '🧭', title: 'Гео-разведка', base: 180, growth: 1.8, max: 10,
-      info: l => l === 0 ? 'Больше сундуков и редких руд' : `Сундуки +${(l * 0.6).toFixed(1)}%, редкие жилы +${(l * 0.75).toFixed(1)}%` }
+    { id: 'miner',      icon: '👷', get title() { return t('ench_miner'); }, base: 150, growth: 1.7, max: 12,
+      info: l => l === 0 ? t('ench_miner_0') :
+                 t('ench_miner_info', { a: Formulas.minerRate(l).toFixed(2), b: Formulas.offlineRate(l).toFixed(2) }) },
+    { id: 'prospector', icon: '🧭', get title() { return t('ench_prospector'); }, base: 180, growth: 1.8, max: 10,
+      info: l => l === 0 ? t('ench_prospector_0') : t('ench_prospector_info', { a: (l * 0.6).toFixed(1), b: (l * 0.75).toFixed(1) }) }
 ];
-const SAVE_KEY = 'mine_bouncer_save_v3';
+const SAVE_KEY = 'mine_bouncer_save_v4';
 
 const GameData = {
     coins: 15,
     lastTime: Date.now(),
     bestDepth: 0,
+    noAds: false,
+    hadSave: false,
+    perm: { fire: false, coin: false, dur: false },
+    daily: { last: '', streak: 0 },
     boosts: { fire: false, coin: false, dur: false },
     stats: { tierIdx: 0, unbreaking: 1, efficiency: 1, fortune: 1, pyro: 1, slam: 1, crit: 1, miner: 0, prospector: 0 },
     tiers: TIERS,
@@ -1182,10 +1477,21 @@ const GameData = {
         PASSIVES.forEach(p => { s[p.id] = Math.max(0, Math.min(p.max, s[p.id] | 0)); });
     },
     load() {
-        const raw = localStorage.getItem(SAVE_KEY);
+        let raw = localStorage.getItem(SAVE_KEY);
+        let migrated = false;
+        if (!raw) {
+            raw = localStorage.getItem('mine_bouncer_save_v3') || localStorage.getItem('mine_bouncer_save_v2');
+            migrated = !!raw;
+        }
         if (raw) {
             try {
                 const p = JSON.parse(raw);
+                this.hadSave = true;
+                // v3 начиналась с wood=0 → сдвигаем на +1, чтобы палка стала нулевым тиром
+                if (migrated && p.stats && Number.isFinite(p.stats.tierIdx)) p.stats.tierIdx = Math.min((p.stats.tierIdx | 0) + 1, 7);
+                this.noAds = !!p.noAds;
+                this.perm = { ...this.perm, ...(p.perm || {}) };
+                this.daily = { ...this.daily, ...(p.daily || {}) };
                 this.coins = Math.max(0, Math.floor(p.coins ?? 15));
                 this.stats = { ...this.stats, ...p.stats };
                 this.bestDepth = p.bestDepth || 0;
@@ -1197,7 +1503,7 @@ const GameData = {
                     const earned = Math.floor(sec * Formulas.offlineRate(this.stats.miner));
                     if (earned > 0) {
                         this.coins += earned;
-                        setTimeout(() => showToast(`Шахтёры добыли, пока вас не было: +${earned} 🪙`), 400);
+                        setTimeout(() => showToast(t('toast_offline', { n: earned })), 400);
                     }
                 }
             } catch (e) {}
@@ -1205,9 +1511,10 @@ const GameData = {
     },
     save() {
         this.lastTime = Date.now();
+        Yandex.queueCloud();
         try {
             localStorage.setItem(SAVE_KEY, JSON.stringify({
-                coins: Math.floor(this.coins), stats: this.stats, lastTime: this.lastTime, bestDepth: this.bestDepth, boosts: this.boosts
+                ...GameData.payload()
             }));
         } catch (e) {}
     }
@@ -1216,15 +1523,402 @@ const GameData = {
 // ============================================================
 //  ДВИЖОК
 // ============================================================
+// ============================================================
+//  ЯНДЕКС ИГРЫ: SDK, лидерборд, покупки, реклама, облачные сохранения
+// ============================================================
+const LB_NAME = 'depth';              // техническое имя лидерборда в консоли Яндекс Игр
+const INTERSTITIAL_GAP = 4 * 60 * 1000;   // межстраничная реклама не чаще раза в 4 минуты
+
+// ID товаров должны совпадать с консолью разработчика. rub — цена по умолчанию, пока каталог не загрузился.
+const PRODUCTS = {
+    no_ads:     { icon: '🚫', title: 'Отключить рекламу', desc: 'Навсегда убирает рекламу между забоями. Видео за награду остаётся по желанию', once: true, rub: 299 },
+    boost_pack: { icon: '🎁', title: 'Набор шахтёра', desc: 'Все три бонуса навсегда: действуют в каждом забое', perm: ['fire', 'coin', 'dur'], once: true, rub: 449 },
+    boost_fire: { icon: '🔥', title: 'Огненная кирка', desc: 'Навсегда: огненный старт в каждом забое', perm: ['fire'], once: true, rub: 199 },
+    boost_coin: { icon: '💰', title: 'Золотая лихорадка', desc: 'Навсегда: монеты ×1,5 в каждом забое', perm: ['coin'], once: true, rub: 199 },
+    boost_dur:  { icon: '🧰', title: 'Запасная кирка', desc: 'Навсегда: +25% прочности в каждом забое', perm: ['dur'], once: true, rub: 199 },
+    coins_s:    { icon: '🪙', title: 'Мешок монет', desc: '+5 000 🪙', coins: 5000, rub: 99 },
+    coins_m:    { icon: '💰', title: 'Сундук монет', desc: '+30 000 🪙', coins: 30000, rub: 299 },
+    coins_l:    { icon: '👑', title: 'Казна гнома', desc: '+150 000 🪙', coins: 150000, rub: 990 }
+};
+
+Object.keys(PRODUCTS).forEach(id => {
+    Object.defineProperty(PRODUCTS[id], 'title', { get: () => t('prod_' + id + '_t'), enumerable: true, configurable: true });
+    Object.defineProperty(PRODUCTS[id], 'desc',  { get: () => t('prod_' + id + '_d'), enumerable: true, configurable: true });
+});
+
+function grantProduct(id) {
+    const P = PRODUCTS[id];
+    if (!P) return;
+    if (id === 'no_ads') GameData.noAds = true;
+    if (P.coins) GameData.coins += P.coins;
+    if (P.perm) P.perm.forEach(b => { GameData.perm[b] = true; });
+}
+
+GameData.payload = function () {
+    return { coins: Math.floor(this.coins), stats: this.stats, lastTime: this.lastTime, bestDepth: this.bestDepth, boosts: this.boosts, noAds: this.noAds, perm: this.perm, daily: this.daily };
+};
+
+const Yandex = {
+    sdk: null, player: null, payments: null, leaderboards: null,
+    authorized: false, catalog: {}, lastInter: Date.now(),
+    cloudTimer: null, gpOn: false, buying: false,
+
+    async init() {
+        if (typeof YaGames === 'undefined') return;
+        try { this.sdk = await YaGames.init(); } catch (e) { this.sdk = null; return; }
+        try {
+            const yl = this.sdk.environment && this.sdk.environment.i18n && this.sdk.environment.i18n.lang;
+            if (yl) { I18N.auto = mapLang(yl); applyLang(Settings.lang !== 'auto' ? Settings.lang : I18N.auto); }
+        } catch (e) {}
+        try { await this.loadPlayer(); } catch (e) {}
+        try { this.leaderboards = await this.sdk.getLeaderboards(); } catch (e) {}
+        await this.loadPayments();
+        try { this.sdk.features.LoadingAPI.ready(); } catch (e) {}
+        try {
+            this.sdk.on('game_api_pause', () => { this.adPause(true); });
+            this.sdk.on('game_api_resume', () => { this.adPause(false); });
+        } catch (e) {}
+    },
+
+    // ---- игрок и облачное сохранение ----
+    async loadPlayer() {
+        this.player = await this.sdk.getPlayer({ scopes: false });
+        this.authorized = this.player.getMode() !== 'lite';
+        try {
+            const d = await this.player.getData(['save']);
+            const c = d && d.save;
+            if (c && typeof c === 'object') {
+                const G = GameData;
+                G.bestDepth = Math.max(G.bestDepth, c.bestDepth | 0);
+                if (!G.hadSave || (c.lastTime || 0) > G.lastTime) {
+                    G.coins = Math.max(0, Math.floor(c.coins || 0));
+                    G.stats = { ...G.stats, ...c.stats };
+                    G.boosts = { ...G.boosts, ...(c.boosts || {}) };
+                    G.daily = { ...G.daily, ...(c.daily || {}) };
+                    G.perm = { ...G.perm, ...(c.perm || {}) };
+                    G.clamp();
+                }
+                G.hadSave = true;
+                G.save();
+            }
+        } catch (e) {}
+        if (this.authorized) this.submitScore(GameData.bestDepth);
+    },
+    queueCloud() {
+        if (!this.player) return;
+        clearTimeout(this.cloudTimer);
+        this.cloudTimer = setTimeout(() => this.flushCloud(), 4000);
+    },
+    flushCloud() {
+        if (!this.player) return;
+        clearTimeout(this.cloudTimer);
+        try { this.player.setData({ save: GameData.payload() }).catch(() => {}); } catch (e) {}
+    },
+    async login() {
+        if (!this.sdk) return;
+        try { await this.sdk.auth.openAuthDialog(); await this.loadPlayer(); } catch (e) {}
+    },
+
+    // ---- лидерборд ----
+    submitScore(d) {
+        if (this.leaderboards && this.authorized && d > 0) {
+            this.leaderboards.setLeaderboardScore(LB_NAME, d).catch(() => {});
+        }
+    },
+
+    // ---- покупки ----
+    async loadPayments() {
+        try { this.payments = await this.sdk.getPayments({ signed: false }); } catch (e) { this.payments = null; return; }
+        try {
+            const items = await this.payments.getCatalog();
+            items.forEach(i => { this.catalog[i.id] = i; });
+        } catch (e) {}
+        try {
+            // восстановление: неподтверждённые покупки (вылет во время оплаты) + проверка «без рекламы»
+            const list = await this.payments.getPurchases();
+            let noAds = false;
+            const perm = { fire: false, coin: false, dur: false };
+            for (const p of list) {
+                const P = PRODUCTS[p.productID];
+                if (!P) continue;
+                if (P.once) {   // непотребляемые покупки: просто отмечаем, что они есть
+                    if (p.productID === 'no_ads') noAds = true;
+                    (P.perm || []).forEach(b => { perm[b] = true; });
+                    continue;
+                }
+                grantProduct(p.productID);
+                GameData.save();
+                try { await this.payments.consumePurchase(p.purchaseToken); } catch (e) {}
+                showToast(t('toast_restored', { name: PRODUCTS[p.productID].title }));
+            }
+            GameData.noAds = noAds;
+            GameData.perm = perm;
+            GameData.save();
+        } catch (e) {}
+    },
+    priceOf(id) {
+        const c = this.catalog[id];
+        return (c && c.price) ? c.price : (PRODUCTS[id].rub + ' ₽');
+    },
+    async buy(id, after) {
+        if (!this.payments) {
+            if (typeof YaGames === 'undefined') {
+                // игра запущена не в Яндекс Играх: покупка проходит бесплатно (тестовый режим)
+                grantProduct(id);
+                GameData.save();
+                AudioEngine.ore(8);
+                showToast(t('toast_test_buy', { name: PRODUCTS[id].title }));
+                if (after) after();
+                return;
+            }
+            showToast(t('toast_no_pay'));
+            return;
+        }
+        if (this.buying) return;
+        this.buying = true;
+        try {
+            const pur = await this.payments.purchase({ id });
+            grantProduct(id);
+            GameData.save();
+            if (!PRODUCTS[id].once) { try { await this.payments.consumePurchase(pur.purchaseToken); } catch (e) {} }
+            showToast(t('toast_thanks', { name: PRODUCTS[id].title }));
+            AudioEngine.ore(8);
+        } catch (e) {
+            showToast(t('toast_pay_fail'));
+        }
+        this.buying = false;
+        if (after) after();
+    },
+
+    // ---- реклама ----
+    adPause(on) { AudioEngine.adMuted = on; AudioEngine.applyVolumes(); },
+    rewarded(onReward) {
+        if (!this.sdk) { stubRewardedAd(onReward); return; }
+        let ok = false;
+        this.sdk.adv.showRewardedVideo({ callbacks: {
+            onOpen: () => this.adPause(true),
+            onRewarded: () => { ok = true; },
+            onClose: () => { this.adPause(false); if (ok) onReward(); },
+            onError: () => { this.adPause(false); showToast(t('toast_ad_fail')); }
+        } });
+    },
+    interstitial(done) {
+        if (GameData.noAds || Date.now() - this.lastInter < INTERSTITIAL_GAP) { done(); return; }
+        // короткая заглушка-предупреждение, потом сам ролик (или mock)
+        let n = 2;
+        const box = document.getElementById('adv-warn');
+        const num = document.getElementById('adv-warn-n');
+        if (box && num) {
+            num.textContent = n;
+            box.classList.remove('hidden');
+            const t = setInterval(() => {
+                n--;
+                if (n > 0) { num.textContent = n; return; }
+                clearInterval(t);
+                box.classList.add('hidden');
+                this._showInterstitial(done);
+            }, 1000);
+        } else {
+            this._showInterstitial(done);
+        }
+    },
+    _showInterstitial(done) {
+        if (!this.sdk) {
+            // mock: просто короткая пауза
+            this.adPause(true);
+            setTimeout(() => { this.adPause(false); this.lastInter = Date.now(); done(); }, 1500);
+            return;
+        }
+        let called = false;
+        const fin = () => { this.adPause(false); if (!called) { called = true; done(); } };
+        try {
+            this.sdk.adv.showFullscreenAdv({ callbacks: {
+                onOpen: () => this.adPause(true),
+                onClose: shown => { if (shown) this.lastInter = Date.now(); fin(); },
+                onError: fin,
+                onOffline: fin
+            } });
+        } catch (e) { fin(); }
+    },
+    gameplay(on) {
+        if (this.gpOn === on) return;
+        this.gpOn = on;
+        try {
+            const g = this.sdk && this.sdk.features.GameplayAPI;
+            if (g) { if (on) g.start(); else g.stop(); }
+        } catch (e) {}
+    }
+};
+
+function showRewardedAd(cb) { Yandex.rewarded(cb); }
+
+const esc = s => String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+
+// ---- Ежедневный подарок ----
+function dayKey(d) { return d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate(); }
+function dailyInfo() {
+    const D = GameData.daily, now = new Date();
+    if (D.last === dayKey(now)) return { ready: false, streak: D.streak, reward: 0 };
+    const y = new Date(now); y.setDate(y.getDate() - 1);
+    const streak = D.last === dayKey(y) ? Math.min((D.streak | 0) + 1, 7) : 1;
+    return { ready: true, streak, reward: 100 * streak };
+}
+function renderDailyCard(list) {
+    const d = dailyInfo();
+    const shown = d.streak;
+    const card = document.createElement('div');
+    card.className = 'upgrade-card' + (d.ready ? ' equipped' : '');
+    card.innerHTML = `
+        <div class="u-icon">🎁</div>
+        <div class="u-info">
+            <div class="u-title">${t('daily_title')}</div>
+            <div class="u-desc">${d.ready ? t('daily_ready', { day: shown, n: d.reward }) : t('daily_done')}. ${t('daily_note')}</div>
+        </div>
+        <button class="btn btn-buy">${d.ready ? t('daily_claim') : t('daily_tomorrow')}</button>`;
+    const btn = card.querySelector('button');
+    if (!d.ready) btn.disabled = true;
+    else btn.onclick = () => {
+        GameData.daily = { last: dayKey(new Date()), streak: d.streak };
+        GameData.coins += d.reward;
+        GameData.save();
+        AudioEngine.ore(6);
+        showToast(t('toast_gift', { n: d.reward }));
+        renderUpgradesList();
+    };
+    list.appendChild(card);
+}
+
+// ---- Вкладка «Донат» ----
+function renderShopCards(list) {
+    const note = document.createElement('div');
+    note.className = 'u-desc';
+    note.style.cssText = 'text-align:center;padding:2px 8px 4px;';
+    note.textContent = t('shop_note');
+    list.appendChild(note);
+    ['no_ads', 'boost_pack', 'boost_fire', 'boost_coin', 'boost_dur', 'coins_s', 'coins_m', 'coins_l'].forEach(id => {
+        const P = PRODUCTS[id];
+        let done = false, doneLabel = '';
+        if (id === 'no_ads' && GameData.noAds) { done = true; doneLabel = t('bought'); }
+        if (P.perm && P.perm.every(b => GameData.perm[b])) { done = true; doneLabel = t('bought'); }
+        const card = document.createElement('div');
+        card.className = 'upgrade-card' + (done ? ' equipped' : '');
+        card.innerHTML = `
+            <div class="u-icon">${P.icon}</div>
+            <div class="u-info">
+                <div class="u-title">${P.title}</div>
+                <div class="u-desc">${P.desc}</div>
+            </div>
+            <button class="btn btn-buy btn-pay ${done ? 'equipped-btn' : ''}">${done ? doneLabel : `💳<small>${esc(Yandex.priceOf(id))}</small>`}</button>`;
+        const btn = card.querySelector('button');
+        if (done) btn.disabled = true;
+        else btn.onclick = () => Yandex.buy(id, renderUpgradesList);
+        list.appendChild(card);
+    });
+}
+
+// ---- Таблица лидеров ----
+let lbToken = 0;
+async function renderLeaders() {
+    const list = $('leaders-list'), tok = ++lbToken;
+    if (!Yandex.leaderboards) { renderDemoLeaders(); return; }
+    list.innerHTML = '<div class="u-desc" style="text-align:center;padding:12px">' + t('lb_loading') + '</div>';
+    let entries = [];
+    try {
+        const res = await Yandex.leaderboards.getLeaderboardEntries(LB_NAME, { includeUser: Yandex.authorized, quantityAround: 2, quantityTop: 10 });
+        entries = res.entries || [];
+    } catch (e) {
+        if (tok === lbToken) list.innerHTML = '<div class="u-desc" style="text-align:center;padding:12px">' + t('lb_error') + '</div>';
+        return;
+    }
+    if (tok !== lbToken) return;
+    const myId = (Yandex.authorized && Yandex.player) ? Yandex.player.getUniqueID() : null;
+    entries.sort((a, b) => a.rank - b.rank);
+    const medals = ['🥇', '🥈', '🥉'];
+    let html = '', prev = 0;
+    if (!Yandex.authorized) html += '<button class="btn btn-pay lb-login" id="lb-login">' + t('lb_login') + '</button>';
+    else if (GameData.bestDepth <= 0) html += '<div class="u-desc" style="text-align:center;padding:4px">' + t('lb_dive') + '</div>';
+    if (!entries.length) html += '<div class="u-desc" style="text-align:center;padding:12px">' + t('lb_empty') + '</div>';
+    for (const e of entries) {
+        if (e.rank === prev) continue;
+        if (prev && e.rank - prev > 1) html += '<div class="lb-gap">···</div>';
+        prev = e.rank;
+        const me = myId && e.player && e.player.uniqueID === myId;
+        const name = (e.player && e.player.publicName) || t('player');
+        html += `<div class="lb-row${me ? ' me' : ''}"><div class="lb-rank">${medals[e.rank - 1] || e.rank}</div><div class="lb-name">${esc(me ? name + ' ' + t('you_paren') : name)}</div><div class="lb-depth">${e.score} ${t('unit_m')}</div></div>`;
+    }
+    list.innerHTML = html;
+    const lg = $('lb-login');
+    if (lg) lg.onclick = async () => { await Yandex.login(); renderLeaders(); };
+}
+
+let doubleAmount = 0;
+
+const LANGS = [['auto', null], ['ru', 'Русский'], ['en', 'English'], ['tr', 'Türkçe'], ['es', 'Español'], ['ar', 'العربية']];
+function renderLangButtons() {
+    const box = document.getElementById('lang-list');
+    if (!box) return;
+    box.innerHTML = '';
+    LANGS.forEach(([code, name]) => {
+        const b = document.createElement('button');
+        b.className = 'btn btn-ghost lang-btn' + (Settings.lang === code ? ' equipped-btn' : '');
+        b.textContent = name || t('lang_auto');
+        b.onclick = () => {
+            Settings.lang = code;
+            Settings.save();
+            applyLang(code === 'auto' ? I18N.auto : code);
+            renderLangButtons();
+        };
+        box.appendChild(b);
+    });
+}
+
+const pickURLCache = {};
+function pickURL(id) { return pickURLCache[id] || (pickURLCache[id] = Textures.picks[id].toDataURL()); }
+const menuPickCache = {};
+function menuPickURL(id) {
+    if (menuPickCache[id]) return menuPickCache[id];
+    const S = 176, P = 28;
+    const c = makeCanvas(S, S, g => {
+        g.imageSmoothingEnabled = false;
+        g.shadowColor = 'rgba(120,230,255,0.45)'; g.shadowBlur = 18;
+        g.drawImage(Textures.picks[id], P, P, 120, 120);
+        g.shadowColor = 'rgba(0,0,0,0.4)'; g.shadowBlur = 0; g.shadowOffsetY = 6;
+        g.globalCompositeOperation = 'destination-over';
+        g.drawImage(Textures.picks[id], P, P, 120, 120);
+    });
+    return (menuPickCache[id] = c.toDataURL());
+}
+
+// свечение кирки: shadowBlur в canvas очень дорогой (особенно на iOS), поэтому
+// рисуем кирку с ореолом один раз в отдельный canvas и дальше просто копируем его
+const glowCache = new Map();
+function glowedPick(key, color, blur) {
+    const b = Math.max(6, Math.round(blur / 3) * 3);
+    const id = key + '|' + color + '|' + b;
+    let e = glowCache.get(id);
+    if (!e) {
+        const pad = b + 8, size = 48 + pad * 2;
+        const c = makeCanvas(size, size, g => {
+            g.imageSmoothingEnabled = false;
+            g.shadowColor = color; g.shadowBlur = b;
+            g.drawImage(Textures.picks[key], pad, pad, 48, 48);
+        });
+        e = { c, h: size / 2 };
+        glowCache.set(id, e);
+    }
+    return e;
+}
+
 const frame = document.getElementById('app-frame');
 const canvas = document.getElementById('gameCanvas');
-const ctx = canvas.getContext('2d');
+const ctx = canvas.getContext('2d', { alpha: false });
 canvas.width = BLOCK_W * COLS;
 
 function resizeCanvas() {
     const r = frame.getBoundingClientRect();
     if (!r.width || !r.height) return;
-    canvas.height = Math.max(640, Math.min(1000, Math.round(canvas.width * r.height / r.width)));
+    const nh = Math.max(640, Math.min(1000, Math.round(canvas.width * r.height / r.width)));
+    if (canvas.height !== nh) canvas.height = nh;   // присвоение height сбрасывает canvas, поэтому только при реальном изменении
 }
 
 let state = 'MENU';
@@ -1266,7 +1960,8 @@ const BLOCK_DEFS = {
     CHEST:    { hp: 4,  val: 20, tex: 'chest',     chips: ['#c4843f', '#ffe45e'], isChest: true, spark: '#fff2a0' },
     SLIME:    { hp: 5,  val: 1,  tex: 'slime',     chips: ['#7be85a', '#c9ffa8'], isSlime: true },
     LAVA:     { hp: 9999, val: 0, tex: 'lava', chips: ['#ff7a1a', '#ffd27a'], isLava: true, spark: '#ffd27a' },
-    ENDCHEST: { hp: 7, val: 100, tex: 'endchest', chips: ['#2d2247', '#47ffd0'], isChest: true, spark: '#7affd8' }
+    ENDCHEST: { hp: 7, val: 100, tex: 'endchest', chips: ['#2d2247', '#47ffd0'], isChest: true, spark: '#7affd8' },
+    BENCH:    { hp: 3, val: 12, tex: 'workbench', chips: ['#b5834a', '#6b4019'], isBench: true, spark: '#9ae6ff' }
 };
 
 const LAVA_START = 100;
@@ -1278,6 +1973,7 @@ function getBlockForDepth(r, allowLava = true) {
     if (s < 0.035 + 0.022 + pros * 0.4 + 0.05) return BLOCK_DEFS.SLIME;
     if (allowLava && r >= LAVA_START && Math.random() < Math.min(0.008 + (r - LAVA_START) * 0.00012, 0.03)) return BLOCK_DEFS.LAVA;
     if (r >= 100 && Math.random() < 0.008 + pros * 0.1) return BLOCK_DEFS.ENDCHEST;
+    if (r >= 4 && Math.random() < 0.004 + pros * 0.03) return BLOCK_DEFS.BENCH;   // верстак: редкий
 
     const o = Math.random();
     if (r > 100) {
@@ -1333,6 +2029,8 @@ class PickaxeObj {
         this.fireSnd = 0;
         this.durability = this.maxDurability;
         this.isSlamming = false;
+        this.boostT = 0;
+        this.mini = null;
         this.trail = [];
     }
     update(dt) {
@@ -1349,12 +2047,14 @@ class PickaxeObj {
             const gravity = this.isSlamming ? 1600 : 780;
             this.vy += gravity * dt;
         }
+        if (this.boostT > 0) this.boostT = Math.max(0, this.boostT - dt);
         this.x += this.vx * dt;
         this.y += this.vy * dt;
         this.rot += this.rotSpeed * dt;
 
-        this.trail.push({ x: this.x, y: this.y, alpha: 0.7 });
-        if (this.trail.length > 9) this.trail.shift();
+        const tp = this.trail.length >= 9 ? this.trail.shift() : {};
+        tp.x = this.x; tp.y = this.y;
+        this.trail.push(tp);
 
         if (this.x - this.radius < 0) {
             this.x = this.radius;
@@ -1373,10 +2073,61 @@ class PickaxeObj {
         }
 
         this.checkBlockCollisions();
+        if (this.mini && this.fireT <= 0) this.updateMini(dt);
 
         if (this.durability <= 0) {
             this.durability = 0;
             triggerGameOver();
+        }
+    }
+    curPower() {
+        if (this.boostT <= 0) return this.power;
+        const nx = TIERS[Math.min(GameData.stats.tierIdx + 1, TIERS.length - 1)];
+        return nx.power > this.power ? nx.power : Math.round(this.power * 1.3);
+    }
+    visTier() {
+        if (this.boostT <= 0) return this.tierId;
+        return TIERS[Math.min(GameData.stats.tierIdx + 1, TIERS.length - 1)].id;
+    }
+    deflect(b) {
+        // отскок зависит от того, в какую часть блока попали, плюс немного случайности
+        this.vx += ((this.x - (b.x + b.w / 2)) / (b.w / 2)) * 150 + (Math.random() - 0.5) * 90;
+        this.vx = Math.max(-480, Math.min(480, this.vx));
+    }
+    applyBench(x, y) {
+        const opts = ['up', 'dur', 'mini'];
+        if (this.mini) opts.splice(2, 1);
+        const pick = opts[(Math.random() * opts.length) | 0];
+        if (pick === 'up') {
+            this.boostT = 10;
+            addFloatText(x, y - 20, t('f_bench_up'), '#ffe27a', 17);
+        } else if (pick === 'dur') {
+            this.maxDurability += 30;
+            this.durability += 30;
+            addFloatText(x, y - 20, t('f_bench_dur'), '#8bf5ab', 17);
+        } else {
+            this.mini = { a: 0, x: this.x, y: this.y };
+            addFloatText(x, y - 20, t('f_bench_mini'), '#9ae6ff', 17);
+        }
+        createSparks(x, y + 10, '#9ae6ff', 14);
+        screenShake = Math.max(screenShake, 6);
+    }
+    updateMini(dt) {
+        const m = this.mini;
+        m.a += dt * 3.2;
+        m.x = this.x + Math.cos(m.a) * 38;
+        m.y = this.y + Math.sin(m.a) * 38;
+        const r = 11, dmg = Math.max(1, Math.round(this.power * 0.5));
+        for (let i = blocks.length - 1; i >= 0; i--) {
+            const b = blocks[i];
+            if (!b || b.isLava || b.isSlime) continue;
+            if (!(m.x + r > b.x && m.x - r < b.x + b.w && m.y + r > b.y && m.y - r < b.y + b.h)) continue;
+            if ((b.miniT || 0) > gameTime) continue;
+            b.miniT = gameTime + 0.3;
+            b.hp -= dmg;
+            b.flash = 0.1;
+            createBlockDebris(b.x + b.w / 2, b.y + b.h / 2, b.def.chips, 3);
+            if (b.hp <= 0) this.destroyBlock(b, i);
         }
     }
     fireSmash() {
@@ -1431,13 +2182,13 @@ class PickaxeObj {
                 if (b.hp <= 0) {
                     blocks.splice(i, 1);
                     createBlockDebris(b.x + b.w / 2, b.y + b.h / 2, b.def.chips, 18);
-                    addFloatText(b.x + b.w / 2, b.y, 'ЛОПНУЛ!', '#9dff7a', 15);
+                    addFloatText(b.x + b.w / 2, b.y, t('f_pop'), '#9dff7a', 15);
                 }
                 break;
             }
 
             const isCrit = Math.random() < Formulas.critChance(GameData.stats.crit);
-            let dmg = this.power * (isCrit ? 3 : 1);
+            let dmg = this.curPower() * (isCrit ? 3 : 1);
             if (this.isSlamming) dmg *= 2.5;
             b.hp -= dmg;
             b.flash = 0.14;
@@ -1448,8 +2199,8 @@ class PickaxeObj {
 
             const el = Formulas.elasticity(GameData.stats.efficiency);
             if (!this.isSlamming) {
-                if (minOverlap === overlapTop) { this.y = b.y - this.radius; this.vy = -Math.abs(this.vy) * el; }
-                else if (minOverlap === overlapBottom) { this.y = b.y + b.h + this.radius; this.vy = Math.abs(this.vy) * el; }
+                if (minOverlap === overlapTop) { this.y = b.y - this.radius; this.vy = -Math.abs(this.vy) * el; this.deflect(b); }
+                else if (minOverlap === overlapBottom) { this.y = b.y + b.h + this.radius; this.vy = Math.abs(this.vy) * el; this.deflect(b); }
                 else if (minOverlap === overlapLeft) { this.x = b.x - this.radius; this.vx = -Math.abs(this.vx) * el; }
                 else { this.x = b.x + b.w + this.radius; this.vx = Math.abs(this.vx) * el; }
             }
@@ -1459,7 +2210,7 @@ class PickaxeObj {
             comboTimer = 0;
             if (combo > maxCombo) maxCombo = combo;
             if (isCrit) {
-                addFloatText(b.x + b.w / 2, b.y - 4, 'КРИТ!', '#ff6a6a', 17);
+                addFloatText(b.x + b.w / 2, b.y - 4, t('f_crit'), '#ff6a6a', 17);
                 screenShake = Math.max(screenShake, 8);
             }
 
@@ -1482,7 +2233,7 @@ class PickaxeObj {
         createSparks(cx, cy, '#ffb04a', 16);
         createSparks(cx, cy, '#ff5a1f', 10);
         createBlockDebris(cx, cy, ['#ff7a1a', '#ffd27a', '#3a2742'], 18);
-        addFloatText(cx, cy - 22, 'ЛАВА!', '#ff8a3a', 22);
+        addFloatText(cx, cy - 22, t('f_lava'), '#ff8a3a', 22);
         screenShake = 14;
         AudioEngine.sizzle();
         this.vx = 0; this.vy = 0;
@@ -1502,9 +2253,10 @@ class PickaxeObj {
         addFloatText(b.x + b.w / 2, b.y, `+${reward} 🪙`, big ? '#fff08a' : '#ffe27a', big ? 18 : 15);
         createBlockDebris(b.x + b.w / 2, b.y + b.h / 2, b.def.chips, 10);
         if (b.def.spark) createSparks(b.x + b.w / 2, b.y + b.h / 2, b.def.spark, big ? 10 : 5);
+        if (b.def.isBench) this.applyBench(b.x + b.w / 2, b.y);
         if (b.tex === 'endchest') {
             createSparks(b.x + b.w / 2, b.y + b.h / 2, '#7affd8', 16);
-            addFloatText(b.x + b.w / 2, b.y - 22, 'СУНДУК КРАЯ!', '#7affd8', 16);
+            addFloatText(b.x + b.w / 2, b.y - 22, t('f_endchest'), '#7affd8', 16);
         }
     }
 }
@@ -1528,10 +2280,11 @@ function triggerTNT(x, y) {
         runEarnedCoins += reward;
         createBlockDebris(bx, by, b.def.chips, 4);
     }
-    addFloatText(x, y - 10, 'БА-БАХ!', '#ff7a5a', 20);
+    addFloatText(x, y - 10, t('f_boom'), '#ff7a5a', 20);
 }
 
 function createBlockDebris(x, y, colors, count = 6) {
+    if (particles.length > (lowFx ? 120 : 280)) return;
     const cols = Array.isArray(colors) ? colors : [colors];
     for (let i = 0; i < count; i++) {
         particles.push({
@@ -1545,6 +2298,7 @@ function createBlockDebris(x, y, colors, count = 6) {
     }
 }
 function createSparks(x, y, color, count = 6) {
+    if (particles.length > (lowFx ? 120 : 280)) return;
     for (let i = 0; i < count; i++) {
         const a = Math.random() * Math.PI * 2, s = 60 + Math.random() * 140;
         particles.push({
@@ -1573,15 +2327,17 @@ function startRun() {
     AudioEngine.init();
     AudioEngine.startMusic();
     state = 'AIMING';
+    Yandex.gameplay(true);
     cameraY = 0;
     highestY = 0;
     blocks = []; particles = []; floatTexts = []; blasts = [];
     combo = 1; comboTimer = 0; maxCombo = 1;
-    runEarnedCoins = 0; runPassive = 0; lavaWarned = false; deathCause = null;
+    runEarnedCoins = 0; runPassive = 0; lavaWarned = false; deathCause = null; revivedThisRun = false;
     slamTimer = getSlamMaxCooldown() * 0.5;
 
     const bs = GameData.boosts;
-    runBoost = { fire: !!bs.fire, coin: !!bs.coin, dur: !!bs.dur };
+    const pm = GameData.perm;
+    runBoost = { fire: !!bs.fire || !!pm.fire, coin: !!bs.coin || !!pm.coin, dur: !!bs.dur || !!pm.dur };
     coinBoost = runBoost.coin ? 1.5 : 1;
     durBoost = runBoost.dur ? 1.25 : 1;
     GameData.boosts = { fire: false, coin: false, dur: false };
@@ -1597,30 +2353,96 @@ function startRun() {
     passiveAcc = 0;
     refreshHud();
     const act = [];
-    if (runBoost.fire) act.push('🔥 Огненная кирка');
-    if (runBoost.coin) act.push('💰 ×1,5 монет');
-    if (runBoost.dur) act.push('🧰 +25% прочности');
-    if (act.length) showToast('Бонусы: ' + act.join(' · '));
+    if (runBoost.fire) act.push(t('b_fire'));
+    if (runBoost.coin) act.push(t('b_coin'));
+    if (runBoost.dur) act.push(t('b_dur'));
+    if (act.length) showToast(t('toast_boosts', { list: act.join(' · ') }));
 }
 
 function depthNow() { return Math.max(0, Math.floor(highestY / BLOCK_H) - SURFACE_ROW); }
 
+let runsSinceOffer = 0, reviveGap = 2, revivedThisRun = false;
+const toolIsStick = () => TIERS[GameData.stats.tierIdx].id === 'stick';
+
+function nearRecordGap() {
+    const best = GameData.bestDepth, d = depthNow();
+    return (best > 0 && d < best && best - d <= Math.max(4, Math.round(best * 0.15))) ? best - d : 0;
+}
+function shouldOfferRevive() {
+    if (revivedThisRun || depthNow() < 6) return false;
+    if (nearRecordGap() > 0 && runsSinceOffer >= 1) return true;
+    return runsSinceOffer >= reviveGap - 1;
+}
+function showRevive() {
+    runsSinceOffer = 0;
+    reviveGap = 2 + (Math.random() < 0.5 ? 1 : 0);
+    const gap = nearRecordGap();
+    const $ = id => document.getElementById(id);
+    $('revive-title').textContent = deathCause === 'lava' ? t('revive_lava') : (toolIsStick() ? t('revive_stick') : t('revive_pick'));
+    $('revive-text').textContent = gap > 0
+        ? t('revive_text_gap', { n: gap })
+        : t('revive_text_depth', { n: depthNow() });
+    setRunUI(false);
+    $('revive-overlay').classList.remove('hidden');
+}
+function reviveRun() {
+    const $ = id => document.getElementById(id);
+    $('revive-overlay').classList.add('hidden');
+    revivedThisRun = true;
+    deathCause = null;
+    const p = pickaxe;
+    p.burned = false; p.isSlamming = false; p.fireT = 0;
+    if (p.boostT !== undefined) p.boostT = 0;
+    p.durability = Math.max(2, Math.ceil(p.maxDurability * 0.3));
+    p.vx = 0; p.vy = 0; p.rotSpeed = 0; p.trail.length = 0;
+    const r = p.radius + 30;
+    blocks = blocks.filter(b => {
+        const nx = Math.max(b.x, Math.min(p.x, b.x + b.w)), ny = Math.max(b.y, Math.min(p.y, b.y + b.h));
+        return Math.hypot(p.x - nx, p.y - ny) > r;
+    });
+    combo = 1; comboTimer = 0;
+    aimStart = null; aimCur = null; activePointer = null;
+    state = 'AIMING';
+    setRunUI(true);
+    showScreen(null);
+    Yandex.gameplay(true);
+    refreshHud();
+    addFloatText(p.x, p.y - 34, t('f_revive'), '#9dff7a', 20);
+    AudioEngine.ore(8);
+}
+function declineRevive() {
+    document.getElementById('revive-overlay').classList.add('hidden');
+    finishGameOver();
+}
+
 function triggerGameOver() {
     state = 'GAMEOVER';
+    Yandex.gameplay(false);
     AudioEngine.hit(1);
+    if (shouldOfferRevive()) { showRevive(); return; }
+    if (!revivedThisRun) runsSinceOffer++;
+    finishGameOver();
+}
 
+function finishGameOver() {
     const depthMeters = depthNow();
     const isRecord = depthMeters > GameData.bestDepth;
-    if (isRecord) GameData.bestDepth = depthMeters;
+    if (isRecord) { GameData.bestDepth = depthMeters; Yandex.submitScore(depthMeters); }
     GameData.save();
 
-    document.getElementById('res-depth').innerText = `${depthMeters} м`;
+    document.getElementById('res-depth').innerText = `${depthMeters} ${t('unit_m')}`;
     document.getElementById('res-mined').innerText = `+${runEarnedCoins} 🪙`;
     document.getElementById('res-combo').innerText = `×${maxCombo}`;
     document.getElementById('res-passive').innerText = `+${runPassive} 🪙`;
+    doubleAmount = runEarnedCoins;
+    const dbl = document.getElementById('btn-double');
+    dbl.textContent = t('double_amt', { n: doubleAmount });
+    dbl.classList.toggle('hidden', doubleAmount < 20);
     document.getElementById('res-record').classList.toggle('hidden', !(isRecord && depthMeters > 0));
 
-    document.getElementById('go-title').innerText = deathCause === 'lava' ? 'Кирка сгорела в лаве 🔥' : 'Кирка затупилась';
+    document.getElementById('go-title').innerText = deathCause === 'lava'
+        ? (toolIsStick() ? t('go_stick_lava') : t('go_lava'))
+        : (toolIsStick() ? t('go_stick') : t('go_dull'));
     setRunUI(false);
     showScreen('gameover');
 }
@@ -1638,7 +2460,7 @@ function showToast(msg) {
 // ============================================================
 function switchTab(t) {
     currentTab = t;
-    ['gear', 'ench', 'pass', 'ads'].forEach(tab => {
+    ['gear', 'ench', 'pass', 'ads', 'shop'].forEach(tab => {
         document.getElementById(`tab-${tab}`).classList.toggle('active', tab === t);
     });
     renderUpgradesList();
@@ -1659,18 +2481,20 @@ function refreshHubLive() {
 }
 
 const AD_BOOSTS = [
-    { id: 'fire', icon: '🔥', title: 'Огненная кирка', desc: 'Первые 2,5 с забоя кирка летит строго вниз и крушит всё: монеты ×0,3, прочность не тратится, лава не страшна' },
-    { id: 'coin', icon: '💰', title: 'Золотая лихорадка', desc: 'Монеты ×1,5 в следующем забое' },
-    { id: 'dur',  icon: '🧰', title: 'Запасная кирка', desc: '+25% прочности в следующем забое' }
+    { id: 'fire', icon: '🔥', get title() { return t('prod_boost_fire_t'); }, get desc() { return t('ad_fire_desc'); } },
+    { id: 'coin', icon: '💰', get title() { return t('prod_boost_coin_t'); }, get desc() { return t('ad_coin_desc'); } },
+    { id: 'dur',  icon: '🧰', get title() { return t('prod_boost_dur_t'); }, get desc() { return t('ad_dur_desc'); } }
 ];
 function renderAdCards(list) {
     const note = document.createElement('div');
     note.className = 'u-desc';
     note.style.cssText = 'text-align:center;padding:2px 8px 4px;';
-    note.textContent = 'Бонус действует один забой. Каждый вид можно включить один раз перед стартом.';
+    note.textContent = t('ads_note');
     list.appendChild(note);
+    renderDailyCard(list);
     AD_BOOSTS.forEach(a => {
-        const armed = !!GameData.boosts[a.id];
+        const owned = !!GameData.perm[a.id];
+        const armed = owned || !!GameData.boosts[a.id];
         const card = document.createElement('div');
         card.className = 'upgrade-card' + (armed ? ' equipped' : '');
         card.innerHTML = `
@@ -1679,14 +2503,21 @@ function renderAdCards(list) {
                 <div class="u-title">${a.title}</div>
                 <div class="u-desc">${a.desc}</div>
             </div>
-            <button class="btn btn-buy ${armed ? 'equipped-btn' : ''}">${armed ? 'ГОТОВО ✓' : '📺<small>СМОТРЕТЬ</small>'}</button>`;
-        const btn = card.querySelector('button');
-        if (armed) btn.disabled = true;
-        else btn.onclick = () => showRewardedAd(() => {
-            GameData.boosts[a.id] = true;
-            GameData.save();
-            renderUpgradesList();
-        });
+            <div class="u-btns">
+                <button class="btn btn-buy ${armed ? 'equipped-btn' : ''}" data-act="ad">${owned ? t('forever') : (armed ? t('ready') : '📺<small>' + t('watch') + '</small>')}</button>
+                ${armed ? '' : `<button class="btn btn-buy btn-pay" data-act="pay">💳<small>${esc(Yandex.priceOf('boost_' + a.id))}</small></button>`}
+            </div>`;
+        const adBtn = card.querySelector('[data-act="ad"]');
+        const payBtn = card.querySelector('[data-act="pay"]');
+        if (armed) adBtn.disabled = true;
+        else {
+            adBtn.onclick = () => showRewardedAd(() => {
+                GameData.boosts[a.id] = true;
+                GameData.save();
+                renderUpgradesList();
+            });
+            payBtn.onclick = () => Yandex.buy('boost_' + a.id, renderUpgradesList);
+        }
         list.appendChild(card);
     });
 }
@@ -1710,16 +2541,16 @@ function renderUpgradesList() {
             const isNext = idx === S.tierIdx + 1;
             const card = document.createElement('div');
             card.className = 'upgrade-card' + (isEquipped ? ' equipped' : '');
-            const img = Textures.picks[tier.id].toDataURL();
+            const img = pickURL(tier.id);
             card.innerHTML = `
                 <div class="u-icon"><img src="${img}" alt=""></div>
                 <div class="u-info">
-                    <div class="u-title">${tier.name}</div>
-                    <div class="u-desc">Урон ${tier.power} · прочность ${tier.maxDur}</div>
-                    <div class="u-level">${isEquipped ? 'Сейчас в руке' : (isUnlocked ? 'Куплена' : `${tier.cost} 🪙`)}</div>
+                    <div class="u-title">${t('tier_' + tier.id)}</div>
+                    <div class="u-desc">${t('gear_desc', { p: tier.power, d: tier.maxDur })}</div>
+                    <div class="u-level">${isEquipped ? t('gear_equipped') : (isUnlocked ? t('gear_owned') : `${tier.cost} 🪙`)}</div>
                 </div>
                 <button class="btn btn-buy ${isEquipped ? 'equipped-btn' : ''}">
-                    ${isEquipped ? 'В РУКЕ' : (isUnlocked ? 'ВЗЯТЬ' : 'КУПИТЬ')}
+                    ${isEquipped ? t('btn_equipped') : (isUnlocked ? t('btn_equip') : t('btn_buy'))}
                 </button>`;
             const btn = card.querySelector('button');
             if (isEquipped) { btn.disabled = true; }
@@ -1736,6 +2567,8 @@ function renderUpgradesList() {
         });
     } else if (currentTab === 'ads') {
         renderAdCards(list);
+    } else if (currentTab === 'shop') {
+        renderShopCards(list);
     } else {
         const items = currentTab === 'ench' ? ENCHANTS : PASSIVES;
         items.forEach(e => {
@@ -1745,16 +2578,16 @@ function renderUpgradesList() {
             const cost = niceRound(e.base * Math.pow(e.growth, currentTab === 'ench' ? lvl - 1 : lvl));
             const card = document.createElement('div');
             card.className = 'upgrade-card';
-            const verb = currentTab === 'ench' ? 'ПРОКАЧАТЬ' : (lvl === 0 ? 'НАНЯТЬ' : 'УЛУЧШИТЬ');
+            const verb = currentTab === 'ench' ? t('verb_up') : (lvl === 0 ? t('verb_hire') : t('verb_better'));
             card.innerHTML = `
                 <div class="u-icon">${e.icon}</div>
                 <div class="u-info">
                     <div class="u-title">${e.title}</div>
                     <div class="u-desc">${e.info(lvl)}</div>
                     ${pipsHtml(lvl, e.max, startLvl + 1)}
-                    <div class="u-level">Уровень ${lvl}/${e.max}${isMax ? ' · максимум' : ''}</div>
+                    <div class="u-level">${t('level_of', { l: lvl, m: e.max })}${isMax ? t('level_max') : ''}</div>
                 </div>
-                <button class="btn btn-buy">${isMax ? 'МАКС' : `${verb}<small>${cost} 🪙</small>`}</button>`;
+                <button class="btn btn-buy">${isMax ? t('btn_max') : `${verb}<small>${cost} 🪙</small>`}</button>`;
             const btn = card.querySelector('button');
             if (isMax) { btn.disabled = true; }
             else {
@@ -1831,7 +2664,7 @@ function onPointerUp(e) {
                 runBoost.fire = false;
                 pickaxe.fireT = 2.5;
                 pickaxe.vx = 0; pickaxe.vy = 430;
-                addFloatText(pickaxe.x, pickaxe.y - 30, '🔥 ОГНЕННАЯ КИРКА!', '#ffb04a', 18);
+                addFloatText(pickaxe.x, pickaxe.y - 30, t('f_fire'), '#ffb04a', 18);
             }
         }
     }
@@ -1865,8 +2698,8 @@ function goMenu() {
     aimStart = null; aimCur = null; activePointer = null; screenShake = 0;
     setRunUI(false);
     showScreen('menu');
-    $('menu-pick').src = Textures.picks[TIERS[GameData.stats.tierIdx].id].toDataURL();
-    $('menu-best').textContent = `🏆 ${GameData.bestDepth} м`;
+    $('menu-pick').src = menuPickURL(TIERS[GameData.stats.tierIdx].id);
+    $('menu-best').textContent = `🏆 ${GameData.bestDepth} ${t('unit_m')}`;
     $('menu-coins').textContent = `🪙 ${Math.floor(GameData.coins)}`;
 }
 function openHub() {
@@ -1883,7 +2716,8 @@ function syncSlider(id, v) {
 function syncSettingsUI() {
     syncSlider('set-music', Settings.music);
     syncSlider('set-sfx', Settings.sfx);
-    $('set-mute').textContent = Settings.muted ? 'ВЫКЛЮЧЕН' : 'ВКЛЮЧЕН';
+    $('set-mute').textContent = Settings.muted ? t('off') : t('on');
+    renderLangButtons();
 }
 const FAKE_LEADERS = [
     ['ГлубинныйКрот', 214], ['AlmazKing', 187], ['Шахтёр_Витя', 163], ['NetherNick', 149],
@@ -1891,13 +2725,13 @@ const FAKE_LEADERS = [
     ['ТНТ_Маша', 81], ['LavaLover', 73], ['Копатель', 64], ['СлаймБро', 52],
     ['RedstoneRita', 41], ['Новичок2026', 29], ['ЛунаВШахте', 17]
 ];
-function renderLeaders() {
-    const me = { name: 'Вы', depth: GameData.bestDepth, me: true };
+function renderDemoLeaders() {
+    const me = { name: t('you'), depth: GameData.bestDepth, me: true };
     const all = FAKE_LEADERS.map(([name, depth]) => ({ name, depth }));
     all.push(me);
     all.sort((a, b) => (b.depth - a.depth) || (a.me ? 1 : -1));
     const medals = ['🥇', '🥈', '🥉'];
-    const row = (e, i) => `<div class="lb-row${e.me ? ' me' : ''}"><div class="lb-rank">${medals[i] || (i + 1)}</div><div class="lb-name">${e.name}</div><div class="lb-depth">${e.depth} м</div></div>`;
+    const row = (e, i) => `<div class="lb-row${e.me ? ' me' : ''}"><div class="lb-rank">${medals[i] || (i + 1)}</div><div class="lb-name">${e.name}</div><div class="lb-depth">${e.depth} ${t('unit_m')}</div></div>`;
     const top = all.slice(0, 10);
     let html = top.map(row).join('');
     const myIdx = all.indexOf(me);
@@ -1906,7 +2740,7 @@ function renderLeaders() {
 }
 let adTimer = null;
 // Заглушка вместо рекламного SDK: после просмотра ролика нужно вызвать onReward().
-function showRewardedAd(onReward) {
+function stubRewardedAd(onReward) {
     let left = 3;
     const claim = $('ad-claim'), tmr = $('ad-timer');
     claim.disabled = true;
@@ -1931,12 +2765,13 @@ function openSettings(from) {
 function resetQuit() {
     quitArmed = false;
     clearTimeout(quitTimer);
-    $('btn-quit').textContent = 'ВЫЙТИ В МЕНЮ';
+    $('btn-quit').textContent = t('quit');
 }
 function pauseGame() {
     if (state !== 'PLAYING' && state !== 'AIMING') return;
     pausedFrom = state;
     state = 'PAUSED';
+    Yandex.gameplay(false);
     aimStart = null; aimCur = null; activePointer = null;
     screenShake = 0;
     resetQuit();
@@ -1945,11 +2780,13 @@ function pauseGame() {
 function resumeGame() {
     if (state !== 'PAUSED') return;
     state = pausedFrom;
+    Yandex.gameplay(true);
     showScreen(null);
 }
 function quitRun() {
     const d = depthNow();
-    if (d > GameData.bestDepth) GameData.bestDepth = d;
+    if (d > GameData.bestDepth) { GameData.bestDepth = d; Yandex.submitScore(d); }
+    Yandex.gameplay(false);
     GameData.save();
     goMenu();
 }
@@ -1960,8 +2797,20 @@ $('btn-leaders').onclick = () => { renderLeaders(); showScreen('leaders'); };
 $('btn-leaders-back').onclick = () => showScreen('menu');
 $('btn-hub-menu').onclick = goMenu;
 $('btn-start-run').onclick = startRun;
-$('btn-back-hub').onclick = openHub;
-$('btn-go-menu').onclick = goMenu;
+$('btn-back-hub').onclick = () => Yandex.interstitial(openHub);
+$('btn-go-menu').onclick = () => Yandex.interstitial(goMenu);
+$('revive-yes').onclick = () => Yandex.rewarded(reviveRun);
+$('revive-no').onclick = declineRevive;
+$('btn-double').onclick = () => {
+    if (doubleAmount <= 0) return;
+    Yandex.rewarded(() => {
+        GameData.coins += doubleAmount;
+        GameData.save();
+        showToast(t('toast_doubled', { n: doubleAmount }));
+        doubleAmount = 0;
+        $('btn-double').classList.add('hidden');
+    });
+};
 $('btn-pause').onclick = pauseGame;
 $('btn-resume').onclick = resumeGame;
 $('btn-pause-settings').onclick = () => openSettings('pause');
@@ -1969,7 +2818,7 @@ $('btn-settings-back').onclick = () => showScreen(settingsFrom);
 $('btn-quit').onclick = () => {
     if (!quitArmed) {
         quitArmed = true;
-        $('btn-quit').textContent = 'ТОЧНО ВЫЙТИ?';
+        $('btn-quit').textContent = t('quit_confirm');
         clearTimeout(quitTimer);
         quitTimer = setTimeout(resetQuit, 3000);
         return;
@@ -2014,6 +2863,8 @@ window.addEventListener('orientationchange', resizeCanvas);
 document.addEventListener('visibilitychange', () => {
     if (document.hidden) {
         GameData.save();
+        Yandex.flushCloud();
+        if (state === 'PLAYING' || state === 'AIMING') pauseGame();
         AudioEngine.onHidden();
     } else {
         AudioEngine.onVisible();
@@ -2074,13 +2925,30 @@ function initBgTextures() {
     let sd = 301;
     for (const k of Object.keys(BG_BIOMES)) Textures.bg[k] = makeBgTile(BG_BIOMES[k], sd += 17);
 
+    // свечение фона и лавы: рисуем один раз, потом только drawImage
+    Textures.bgGlow = {};
+    for (const k of Object.keys(BG_BIOMES)) {
+        const gc = BG_BIOMES[k].glow;
+        Textures.bgGlow[k] = makeCanvas(280, 280, g => {
+            const gr = g.createRadialGradient(140, 140, 0, 140, 140, 140);
+            gr.addColorStop(0, rgba(gc, 0.26)); gr.addColorStop(1, rgba(gc, 0));
+            g.fillStyle = gr; g.fillRect(0, 0, 280, 280);
+        });
+    }
+    Textures.lavaGlow = makeCanvas(128, 128, g => {
+        const gr = g.createRadialGradient(64, 64, 6, 64, 64, 64);
+        gr.addColorStop(0, 'rgba(255,120,30,1)'); gr.addColorStop(1, 'rgba(255,120,30,0)');
+        g.fillStyle = gr; g.fillRect(0, 0, 128, 128);
+    });
+
 }
 
 function biomeMix(d) {
-    if (d < 34) return ['cave', 'cave', 0];
-    if (d < 46) return ['cave', 'amethyst', (d - 34) / 12];
-    if (d < 94) return ['amethyst', 'amethyst', 0];
-    if (d < 106) return ['amethyst', 'nether', (d - 94) / 12];
+    const sm = t => t * t * (3 - 2 * t);   // smoothstep: мягкий вход и выход
+    if (d < 26) return ['cave', 'cave', 0];
+    if (d < 60) return ['cave', 'amethyst', sm((d - 26) / 34)];
+    if (d < 82) return ['amethyst', 'amethyst', 0];
+    if (d < 120) return ['amethyst', 'nether', sm((d - 82) / 38)];
     return ['nether', 'nether', 0];
 }
 
@@ -2115,20 +2983,42 @@ function drawBackground(t) {
     ctx.fillStyle = sh;
     ctx.fillRect(0, 0, w, h);
 
+    // плавный спуск из леса в пещеру: цвет холмов -> дёрн -> земля -> фон пещеры
+    {
+        const earthTop = BLOCK_H * SURFACE_ROW + 6 - Math.round(cameraY);
+        const len = 640;
+        if (earthTop < h && earthTop + len > 0) {
+            const eg = ctx.createLinearGradient(0, earthTop, 0, earthTop + len);
+            eg.addColorStop(0, 'rgba(53,192,139,1)');
+            eg.addColorStop(0.05, 'rgba(44,128,80,0.97)');
+            eg.addColorStop(0.16, 'rgba(70,74,46,0.9)');
+            eg.addColorStop(0.34, 'rgba(78,54,40,0.72)');
+            eg.addColorStop(0.58, 'rgba(56,40,58,0.42)');
+            eg.addColorStop(0.82, 'rgba(34,32,62,0.16)');
+            eg.addColorStop(1, 'rgba(23,26,51,0)');
+            ctx.fillStyle = eg;
+            const y1 = Math.max(0, earthTop);
+            ctx.fillRect(0, y1, w, Math.min(h, earthTop + len) - y1);
+        }
+    }
+
     ctx.save();
     ctx.globalCompositeOperation = 'lighter';
+    ctx.imageSmoothingEnabled = true;
     const loop = h + 300;
-    for (let i = 0; i < 6; i++) {
+    const spA = Textures.bgGlow[na], spB = k > 0 ? Textures.bgGlow[nb] : null;
+    for (let i = 0; i < (lowFx ? 0 : 6); i++) {
         const hx = hash01(i * 3.7 + 1), hy = hash01(i * 5.9 + 2), hr = hash01(i * 2.3 + 3);
         const y = modp(hy * loop * 2 - cameraY * 0.6, loop) - 150;
         const x = hx * w + Math.sin(t * 0.4 + i * 2) * 14;
         const r = 70 + hr * 70;
         const pulse = 0.65 + 0.35 * Math.sin(t * 1.3 + i * 1.7);
-        const lg = ctx.createRadialGradient(x, y, 0, x, y, r);
-        lg.addColorStop(0, rgba(glowC, 0.26 * pulse)); lg.addColorStop(1, rgba(glowC, 0));
-        ctx.fillStyle = lg;
-        ctx.beginPath(); ctx.arc(x, y, r, 0, Math.PI * 2); ctx.fill();
+        // 'lighter' складывает цвета линейно, поэтому смесь двух биомов = два спрайта с весами (1-k) и k
+        ctx.globalAlpha = (1 - k) * pulse;
+        ctx.drawImage(spA, x - r, y - r, r * 2, r * 2);
+        if (spB) { ctx.globalAlpha = k * pulse; ctx.drawImage(spB, x - r, y - r, r * 2, r * 2); }
     }
+    ctx.globalAlpha = 1;
     if (nW > 0) {
         const lv = ctx.createLinearGradient(0, h, 0, h * 0.45);
         lv.addColorStop(0, `rgba(255,90,20,${0.32 * nW})`); lv.addColorStop(1, 'rgba(255,90,20,0)');
@@ -2228,7 +3118,7 @@ function drawAimUI() {
         ctx.textAlign = 'center';
         ctx.lineJoin = 'round';
         ctx.lineWidth = 4; ctx.strokeStyle = 'rgba(40,10,90,0.9)';
-        const msg = 'Оттяни и отпусти';
+        const msg = t('aim_hint');
         ctx.strokeText(msg, canvas.width / 2, 100 + bob);
         ctx.fillStyle = '#fff';
         ctx.fillText(msg, canvas.width / 2, 100 + bob);
@@ -2277,38 +3167,77 @@ function drawSky(t) {
 // ============================================================
 let lastFrameTime = performance.now();
 let hubTick = 0;
+let lowFx = false;          // включается автоматически, если устройство не тянет 30+ FPS
+let slowCnt = 0;
+let hzSum = 0, hzN = 0, hiHz = false;   // детект экранов 90/120 Гц (iPhone Pro, флагманы Android)
 
 function gameLoop(now) {
-    const dt = Math.min((now - lastFrameTime) / 1000, 0.05);
+    requestAnimationFrame(gameLoop);
+    const raw = now - lastFrameTime;
+    if (raw <= 0) return;
+
+    // замер частоты экрана по первым кадрам: на 120 Гц ограничиваем игру 60 кадрами
+    if (hzN < 45 && raw < 40) {
+        hzSum += raw;
+        if (++hzN === 45) hiHz = (hzSum / hzN) < 10.5;
+    }
+    // в меню/кузнице/паузе анимация фона не требует 60 FPS: 30 и ниже заметно снижают нагрев
+    const calm = state === 'MENU' || state === 'HUB' || state === 'GAMEOVER';
+    const minDelta = state === 'PAUSED' ? 90 : (calm ? 28 : (hiHz ? 12.5 : 0));
+    if (raw < minDelta) return;
     lastFrameTime = now;
+
+    if (state === 'PLAYING' || state === 'AIMING') {
+        if (raw > 30 && raw < 100) slowCnt += 2; else if (slowCnt > 0) slowCnt--;
+        if (!lowFx && slowCnt > 90) lowFx = true;
+    }
+
+    const dt = Math.min(raw / 1000, 0.05);
     if (state !== 'PAUSED') gameTime += dt;
     update(state === 'PAUSED' ? 0 : dt);
     render();
-    requestAnimationFrame(gameLoop);
 }
 
+// HUD: пишем в DOM только когда значение реально изменилось (раньше — 5 записей на каждый кадр)
+const hudCache = {};
+const hudEls = {};
+const hudEl = id => hudEls[id] || (hudEls[id] = document.getElementById(id));
+function hudSet(id, v) {
+    if (hudCache[id] === v) return;
+    hudCache[id] = v;
+    hudEl(id).textContent = v;
+}
 function refreshHud() {
     if (!pickaxe) return;
-    const hudCombo = document.getElementById('hud-combo');
-    document.getElementById('hud-coins').innerText = `🪙 ${Math.floor(GameData.coins)}`;
-    hudCombo.innerText = `🔥 ×${combo}`;
-    hudCombo.classList.toggle('hot', combo >= 10);
-    document.getElementById('hud-depth').innerText = `⬇ ${depthNow()} м`;
+    hudSet('hud-coins', `🪙 ${Math.floor(GameData.coins)}`);
+    hudSet('hud-combo', `🔥 ×${combo}`);
+    const hot = combo >= 10;
+    if (hudCache.hot !== hot) { hudCache.hot = hot; hudEl('hud-combo').classList.toggle('hot', hot); }
+    hudSet('hud-depth', `⬇ ${depthNow()} ${t('unit_m')}`);
 
     const durPct = Math.max(0, (pickaxe.durability / pickaxe.maxDurability) * 100);
-    const fill = document.getElementById('durability-fill');
-    fill.style.width = `${durPct}%`;
-    fill.style.background = durPct > 50 ? 'linear-gradient(180deg,#8bf5ab,#2fc468)'
-                          : durPct > 25 ? 'linear-gradient(180deg,#ffe27a,#f0a020)'
-                          : 'linear-gradient(180deg,#ff9a8a,#e03a2a)';
-    document.getElementById('dur-text').innerText = `${pickaxe.durability} / ${pickaxe.maxDurability}`;
+    const dw = `${durPct}%`;
+    if (hudCache.dw !== dw) {
+        hudCache.dw = dw;
+        const fill = hudEl('durability-fill');
+        fill.style.width = dw;
+        const lvl = durPct > 50 ? 0 : (durPct > 25 ? 1 : 2);
+        if (hudCache.dl !== lvl) {
+            hudCache.dl = lvl;
+            fill.style.background = lvl === 0 ? 'linear-gradient(180deg,#8bf5ab,#2fc468)'
+                                  : lvl === 1 ? 'linear-gradient(180deg,#ffe27a,#f0a020)'
+                                  : 'linear-gradient(180deg,#ff9a8a,#e03a2a)';
+        }
+    }
+    hudSet('dur-text', `${pickaxe.durability} / ${pickaxe.maxDurability}`);
 
     const maxSlam = getSlamMaxCooldown();
-    const slamInd = document.getElementById('slam-indicator');
     const isReady = slamTimer >= maxSlam;
-    slamInd.classList.toggle('ready', isReady);
-    slamInd.style.setProperty('--cd', `${100 - Math.min(100, slamTimer / maxSlam * 100)}%`);
-    document.getElementById('slam-txt').innerText = isReady ? 'СЛЭМ' : `${Math.ceil(maxSlam - slamTimer)}с`;
+    const slamInd = hudEl('slam-indicator');
+    if (hudCache.ready !== isReady) { hudCache.ready = isReady; slamInd.classList.toggle('ready', isReady); }
+    const cd = Math.round(100 - Math.min(100, slamTimer / maxSlam * 100));
+    if (hudCache.cd !== cd) { hudCache.cd = cd; slamInd.style.setProperty('--cd', `${cd}%`); }
+    hudSet('slam-txt', isReady ? t('slam') : `${Math.ceil(maxSlam - slamTimer)}${t('unit_s')}`);
 }
 
 function update(dt) {
@@ -2336,7 +3265,8 @@ function update(dt) {
     }
 
     if (state === 'PLAYING') {
-        pickaxe.update(dt);
+        const sub = dt > 0.03 ? 2 : 1;
+        for (let s = 0; s < sub && state === 'PLAYING'; s++) pickaxe.update(dt / sub);
         if (state !== 'PLAYING') return;
 
         comboTimer += dt;
@@ -2347,12 +3277,12 @@ function update(dt) {
         cameraY += (targetCamY - cameraY) * 6 * dt;
 
         while ((nextSpawnRow * BLOCK_H) < cameraY + canvas.height + 200) spawnRow(nextSpawnRow++);
-        blocks = blocks.filter(b => b.y + b.h > cameraY - 100);
+        if (blocks.length && blocks[0].y + blocks[0].h <= cameraY - 100) blocks = blocks.filter(b => b.y + b.h > cameraY - 100);
 
         slamTimer = Math.min(slamTimer + dt, getSlamMaxCooldown());
 
         refreshHud();
-        if (!lavaWarned && depthNow() >= LAVA_START - 8) { lavaWarned = true; showToast('🔥 Ниже — лава! Она мгновенно сжигает кирку'); }
+        if (!lavaWarned && depthNow() >= LAVA_START - 8) { lavaWarned = true; showToast(t('toast_lava_warn')); }
     }
 
     if (screenShake > 0) screenShake = Math.max(0, screenShake - 30 * dt);
@@ -2431,14 +3361,13 @@ function render() {
                 const bt = (gameTime * 0.8 + ph * 0.37) % 1;
                 ctx.fillStyle = `rgba(255,240,150,${1 - bt})`;
                 ctx.fillRect(b.x + 8 + (ph * 11) % 36, b.y + b.h - 8 - bt * 22, 4, 4);
-                ctx.save();
-                ctx.globalCompositeOperation = 'lighter';
-                const hg = ctx.createRadialGradient(b.x + b.w / 2, b.y + b.h / 2, 6, b.x + b.w / 2, b.y + b.h / 2, 64);
-                hg.addColorStop(0, `rgba(255,120,30,${0.22 + 0.08 * wv})`);
-                hg.addColorStop(1, 'rgba(255,120,30,0)');
-                ctx.fillStyle = hg;
-                ctx.fillRect(b.x - 64, b.y - 64, b.w + 128, b.h + 128);
-                ctx.restore();
+                if (!lowFx) {
+                    ctx.globalCompositeOperation = 'lighter';
+                    ctx.globalAlpha = 0.22 + 0.08 * wv;
+                    ctx.drawImage(Textures.lavaGlow, Math.round(b.x + b.w / 2 - 64), Math.round(b.y + b.h / 2 - 64));
+                    ctx.globalAlpha = 1;
+                    ctx.globalCompositeOperation = 'source-over';
+                }
             }
             if (b.def.glow) {
                 ctx.fillStyle = `rgba(255,40,40,${0.07 + 0.06 * Math.sin(gameTime * 3 + ph)})`;
@@ -2450,6 +3379,12 @@ function render() {
                     const k = (s - 0.9) / 0.1;
                     drawStar(b.x + 10 + (ph * 7) % 36, b.y + 8 + (ph * 3) % 18, 3 + k * 5, b.def.spark, 0.4 + k * 0.6);
                 }
+            }
+            if (b.def.isBench) {
+                const bp = 0.5 + 0.5 * Math.sin(gameTime * 4 + ph);
+                ctx.strokeStyle = `rgba(154,230,255,${0.35 + 0.5 * bp})`;
+                ctx.lineWidth = 3;
+                ctx.strokeRect(b.x + 1.5, b.y + 1.5, b.w - 3, b.h - 3);
             }
             if (b.isTNT) {
                 const pulse = Math.max(0, Math.sin(gameTime * 6 + ph));
@@ -2474,23 +3409,38 @@ function render() {
         }
 
         if (pickaxe && !pickaxe.burned) {
-            const glow = pickaxe.fireT > 0 ? 'rgba(255,130,30,0.95)' : Textures.pickGlow[pickaxe.tierId];
+            const glow = pickaxe.fireT > 0 ? 'rgba(255,130,30,0.95)' : (pickaxe.boostT > 0 ? 'rgba(255,230,90,0.9)' : Textures.pickGlow[pickaxe.tierId]);
+            const trailRGB = glow ? glow.replace(/[\d.]+\)$/, '1)') : '#ffffff';
             for (let i = 0; i < pickaxe.trail.length; i++) {
                 const tr = pickaxe.trail[i];
                 const a = (i / pickaxe.trail.length) * 0.4;
-                ctx.fillStyle = glow ? glow.replace(/[\d.]+\)$/, `${a})`) : `rgba(255,255,255,${a * 0.7})`;
+                ctx.globalAlpha = glow ? a : a * 0.7;
+                ctx.fillStyle = trailRGB;
                 ctx.beginPath(); ctx.arc(tr.x, tr.y, pickaxe.radius * (0.35 + 0.5 * i / pickaxe.trail.length), 0, Math.PI * 2); ctx.fill();
             }
+            ctx.globalAlpha = 1;
             ctx.save();
             ctx.translate(pickaxe.x, pickaxe.y);
             ctx.rotate(pickaxe.rot);
-            if (glow) {
-                ctx.shadowColor = glow;
-                ctx.shadowBlur = pickaxe.fireT > 0 ? 24 : (pickaxe.tierId === 'ench_netherite' ? 16 + 6 * Math.sin(gameTime * 5) : 9);
-            }
             ctx.imageSmoothingEnabled = false;
-            ctx.drawImage(Textures.picks[pickaxe.tierId] || Textures.picks.wood, -24, -24, 48, 48);
+            const pickKey = Textures.picks[pickaxe.visTier()] ? pickaxe.visTier() : 'wood';
+            if (glow) {
+                const blur = pickaxe.fireT > 0 ? 24 : (pickaxe.tierId === 'ench_netherite' ? 16 + 6 * Math.sin(gameTime * 5) : 9);
+                const gs = glowedPick(pickKey, glow, blur);
+                ctx.drawImage(gs.c, -gs.h, -gs.h);
+            } else {
+                ctx.drawImage(Textures.picks[pickKey], -24, -24, 48, 48);
+            }
             ctx.restore();
+            if (pickaxe.mini) {
+                const m = pickaxe.mini;
+                ctx.save();
+                ctx.translate(m.x, m.y);
+                ctx.rotate(m.a * 2 + Math.PI / 2);
+                ctx.imageSmoothingEnabled = false;
+                ctx.drawImage(Textures.picks[pickaxe.tierId] || Textures.picks.wood, -13, -13, 26, 26);
+                ctx.restore();
+            }
         }
 
         for (const p of particles) {
@@ -2529,11 +3479,24 @@ function render() {
 // ============================================================
 //  СТАРТ
 // ============================================================
+I18N.onChange = () => {
+    Object.keys(hudCache).forEach(k => delete hudCache[k]);
+    syncSettingsUI();
+    resetQuit();
+    renderUpgradesList();
+    if (state === 'MENU') goMenu();
+    if (!$('screen-leaders').classList.contains('hidden')) renderLeaders();
+    refreshHud();
+};
 resizeCanvas();
 initTextures();
 GameData.load();
 renderUpgradesList();
 goMenu();
+Yandex.init().then(() => {
+    renderUpgradesList();
+    if (state === 'MENU') goMenu();
+}).catch(() => {});
 requestAnimationFrame(gameLoop);
 </script>
 </body>
