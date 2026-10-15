@@ -3,12 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Minecraft Mine Bouncer Deluxe</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <title>Прыгучая Кирка</title>
     <!-- Yandex Games SDK: на платформе /sdk.js отдаёт Яндекс; локально файла нет — реклама/облако работают в демо-режиме -->
     <script src="/sdk.js"></script>
     <style>
+        @font-face {
+            font-family: 'GameFont';
+            font-style: normal;
+            font-weight: 400 900;
+            font-display: swap;
+            src: url('fonts/game.ttf') format('truetype');
+        }
         :root {
             --gold: #ffd54f;
             --mint: #43e08d;
@@ -17,12 +22,13 @@
             --orange: #ffa23a;
             --panel: rgba(30, 16, 84, 0.80);
             --line: rgba(255, 255, 255, 0.16);
-            --font: 'Fredoka', 'Trebuchet MS', 'Segoe UI', system-ui, sans-serif;
+            --font: 'GameFont', 'Trebuchet MS', 'Segoe UI', system-ui, sans-serif;
         }
         * {
             box-sizing: border-box;
             user-select: none;
             -webkit-user-select: none;
+            -webkit-touch-callout: none;
             -webkit-tap-highlight-color: transparent;
             margin: 0;
             padding: 0;
@@ -385,6 +391,8 @@
         .menu-stats { display: flex; justify-content: center; gap: 10px; }
         .menu-stats span { background: rgba(14,6,48,0.7); border: 2px solid rgba(255,255,255,0.2); border-radius: 999px; padding: 5px 14px; color: #ffd54f; font-weight: 700; font-size: 14px; }
         .btn-wide { width: 100%; }
+        .btn-play-again { background: linear-gradient(180deg, #5ec8ff, #2f8fe0); box-shadow: 0 4px 0 #1a5a9e; }
+        .btn-play-again:active { box-shadow: 0 1px 0 #1a5a9e; }
         .btn-ghost { background: linear-gradient(180deg, #9a92d6, #6a60b4); box-shadow: 0 4px 0 #3a3478; }
         .btn-ghost:active { box-shadow: 0 1px 0 #3a3478; }
         .btn-danger { background: linear-gradient(180deg, #ff8f7e, #e0392b); box-shadow: 0 4px 0 #8f1a10; }
@@ -468,7 +476,7 @@
     <div id="screen-menu" class="screen">
         <div class="menu-center">
             <img id="menu-pick" alt="">
-            <div class="logo"><span class="logo-1">MINE</span><span class="logo-2">BOUNCER</span></div>
+            <div class="logo"><span class="logo-1" data-i18n="logo_1">ПРЫГУЧАЯ</span><span class="logo-2" data-i18n="logo_2">КИРКА</span></div>
             <div class="logo-sub" data-i18n="menu_sub">ГЛУБОКАЯ ШАХТА</div>
         </div>
         <div class="menu-bottom">
@@ -554,7 +562,7 @@
                 <div class="new-record hidden" id="res-record" data-i18n="new_record">🏆 Новый рекорд глубины!</div>
             </div>
         </div>
-        <div class="stack"><button class="btn hidden" id="btn-double">📺 УДВОИТЬ ДОБЫЧУ</button><button class="btn btn-launch" id="btn-back-hub" data-i18n="to_forge">В КУЗНИЦУ</button><button class="btn btn-ghost" id="btn-go-menu" data-i18n="to_menu">В ГЛАВНОЕ МЕНЮ</button></div>
+        <div class="stack"><button class="btn hidden" id="btn-double">📺 УДВОИТЬ ДОБЫЧУ</button><button class="btn btn-play-again" id="btn-play-again" data-i18n="play_again">ИГРАТЬ СНОВА ▶</button><button class="btn btn-launch" id="btn-back-hub" data-i18n="to_forge">В КУЗНИЦУ</button></div>
     </div>
 
     <div id="revive-overlay" class="screen pause-screen hidden" style="z-index:55;">
@@ -596,11 +604,15 @@
 //  До загрузки SDK используется язык браузера; для проверки можно добавить ?lang=en или ?lang=tr
 // ============================================================
 const I18N_SRC = {
+    logo_1: ["ПРЫГУЧАЯ", "BOUNCY", "ZIPLAYAN", "PICO", "المعول"],
+    logo_2: ["КИРКА", "PICKAXE", "KAZMA", "SALTARÍN", "القافز"],
+    game_title: ["Прыгучая Кирка", "Bouncy Pickaxe", "Zıplayan Kazma", "Pico Saltarín", "المعول القافز"],
     // --- меню / общее ---
     pause_aria: ["Пауза", "Pause", "Duraklat", "Pausa", "إيقاف مؤقت"],
     slam_aria: ["Слэм", "Slam", "Slam", "Golpe", "ضربة"],
     slam: ["СЛЭМ", "SLAM", "SLAM", "GOLPE", "ضربة"],
     menu_sub: ["ГЛУБОКАЯ ШАХТА", "DEEP MINE", "DERİN MADEN", "MINA PROFUNDA", "منجم عميق"],
+    play_again: ["ИГРАТЬ СНОВА ▶", "PLAY AGAIN ▶", "TEKRAR OYNA ▶", "JUGAR DE NUEVO ▶", "العب مجددًا ▶"],
     play: ["ИГРАТЬ ▶", "PLAY ▶", "OYNA ▶", "JUGAR ▶", "العب ▶"],
     leaders_btn: ["ТАБЛИЦА ЛИДЕРОВ 🏆", "LEADERBOARD 🏆", "LİDER TABLOSU 🏆", "CLASIFICACIÓN 🏆", "لوحة المتصدرين 🏆"],
     settings_btn: ["НАСТРОЙКИ ⚙", "SETTINGS ⚙", "AYARLAR ⚙", "AJUSTES ⚙", "الإعدادات ⚙"],
@@ -670,7 +682,7 @@ const I18N_SRC = {
     f_revive: ["ВОСКРЕШЕНИЕ!", "REVIVED!", "DİRİLDİN!", "¡REVIVIDO!", "عدت للحياة!"],
     f_bench_up: ["⚡ КИРКА УСИЛЕНА · 10 с", "⚡ PICKAXE BOOSTED · 10 s", "⚡ KAZMA GÜÇLENDİ · 10 sn", "⚡ PICO POTENCIADO · 10 s", "⚡ تعزيز المعول · 10 ث"],
     f_bench_dur: ["🛠 +30 ПРОЧНОСТИ", "🛠 +30 DURABILITY", "🛠 +30 DAYANIKLILIK", "🛠 +30 DURABILIDAD", "🛠 +30 متانة"],
-    f_bench_mini: ["⛏ МИНИ-КИРКА РЯДОМ", "⛏ MINI PICKAXE NEARBY", "⛏ MİNİ KAZMA YANINDA", "⛏ MINIPICO CERCA", "⛏ معول صغير بجانبك"],
+    f_bench_mini: ["⛏ МИНИ-КИРКА · 15 с", "⛏ MINI PICKAXE · 15 s", "⛏ MİNİ KAZMA · 15 sn", "⛏ MINIPICO · 15 s", "⛏ معول صغير · 15 ث"],
     f_fire: ["🔥 ОГНЕННАЯ КИРКА!", "🔥 FIRE PICKAXE!", "🔥 ATEŞ KAZMASI!", "🔥 ¡PICO DE FUEGO!", "🔥 معول النار!"],
     aim_hint: ["Оттяни и отпусти", "Pull back and release", "Geri çek ve bırak", "Tira hacia atrás y suelta", "اسحب ثم أفلت"],
     toast_lava_warn: ["🔥 Ниже — лава! Она мгновенно сжигает кирку", "🔥 Lava below! It instantly burns your pickaxe", "🔥 Aşağıda lav var! Kazmayı anında yakar", "🔥 ¡Hay lava abajo! Quema el pico al instante", "🔥 توجد حمم في الأسفل! تحرق المعول فورًا"],
@@ -812,6 +824,7 @@ function applyLang(lang) {
     I18N.applied = true;
     document.documentElement.lang = lang;
     document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
+    try { document.title = I18N.dict[lang].game_title || document.title; } catch (e) {}
     document.querySelectorAll('[data-i18n]').forEach(el => { el.textContent = t(el.getAttribute('data-i18n')); });
     document.querySelectorAll('[data-i18n-aria]').forEach(el => el.setAttribute('aria-label', t(el.getAttribute('data-i18n-aria'))));
     if (I18N.onChange) I18N.onChange();
@@ -1466,31 +1479,39 @@ const GameData = {
     noAds: false,
     hadSave: false,
     perm: { fire: false, coin: false, dur: false },
+    permOff: { fire: false, coin: false, dur: false },   // тумблеры: купленный буст временно выключен игроком
     daily: { last: '', streak: 0 },
+    handled: [],
     boosts: { fire: false, coin: false, dur: false },
-    stats: { tierIdx: 0, unbreaking: 1, efficiency: 1, fortune: 1, pyro: 1, slam: 1, crit: 1, miner: 0, prospector: 0 },
+    stats: { tierIdx: 0, maxTier: 0, unbreaking: 1, efficiency: 1, fortune: 1, pyro: 1, slam: 1, crit: 1, miner: 0, prospector: 0 },
     tiers: TIERS,
     clamp() {
         const s = this.stats;
         s.tierIdx = Math.max(0, Math.min(TIERS.length - 1, s.tierIdx | 0));
+        s.maxTier = Math.max(s.tierIdx, Math.min(TIERS.length - 1, s.maxTier | 0));   // самая высокая купленная кирка
         ENCHANTS.forEach(e => { s[e.id] = Math.max(1, Math.min(e.max, s[e.id] | 0 || 1)); });
         PASSIVES.forEach(p => { s[p.id] = Math.max(0, Math.min(p.max, s[p.id] | 0)); });
     },
     load() {
-        let raw = localStorage.getItem(SAVE_KEY);
+        let raw = null;
         let migrated = false;
-        if (!raw) {
-            raw = localStorage.getItem('mine_bouncer_save_v3') || localStorage.getItem('mine_bouncer_save_v2');
-            migrated = !!raw;
-        }
+        try {
+            raw = localStorage.getItem(SAVE_KEY);
+            if (!raw) {
+                raw = localStorage.getItem('mine_bouncer_save_v3') || localStorage.getItem('mine_bouncer_save_v2');
+                migrated = !!raw;
+            }
+        } catch (e) { raw = null; }
         if (raw) {
             try {
                 const p = JSON.parse(raw);
                 this.hadSave = true;
                 // v3 начиналась с wood=0 → сдвигаем на +1, чтобы палка стала нулевым тиром
-                if (migrated && p.stats && Number.isFinite(p.stats.tierIdx)) p.stats.tierIdx = Math.min((p.stats.tierIdx | 0) + 1, 7);
+                if (migrated && p.stats && Number.isFinite(p.stats.tierIdx)) { p.stats.tierIdx = Math.min((p.stats.tierIdx | 0) + 1, 7); p.stats.maxTier = Math.min((p.stats.maxTier | 0) + 1, 7); }
                 this.noAds = !!p.noAds;
+                this.handled = Array.isArray(p.handled) ? p.handled.slice(-30) : [];
                 this.perm = { ...this.perm, ...(p.perm || {}) };
+                this.permOff = { ...this.permOff, ...(p.permOff || {}) };
                 this.daily = { ...this.daily, ...(p.daily || {}) };
                 this.coins = Math.max(0, Math.floor(p.coins ?? 15));
                 this.stats = { ...this.stats, ...p.stats };
@@ -1555,10 +1576,13 @@ function grantProduct(id) {
 }
 
 GameData.payload = function () {
-    return { coins: Math.floor(this.coins), stats: this.stats, lastTime: this.lastTime, bestDepth: this.bestDepth, boosts: this.boosts, noAds: this.noAds, perm: this.perm, daily: this.daily };
+    return { coins: Math.floor(this.coins), stats: this.stats, lastTime: this.lastTime, bestDepth: this.bestDepth, boosts: this.boosts, noAds: this.noAds, perm: this.perm, permOff: this.permOff, daily: this.daily, handled: (this.handled || []).slice(-30) };
 };
 
+const IS_DEV = location.protocol === 'file:' || ['localhost', '127.0.0.1', ''].indexOf(location.hostname) >= 0;
+
 const Yandex = {
+    advBusy: false,
     sdk: null, player: null, payments: null, leaderboards: null,
     authorized: false, catalog: {}, lastInter: Date.now(),
     cloudTimer: null, gpOn: false, buying: false,
@@ -1570,20 +1594,26 @@ const Yandex = {
             const yl = this.sdk.environment && this.sdk.environment.i18n && this.sdk.environment.i18n.lang;
             if (yl) { I18N.auto = mapLang(yl); applyLang(Settings.lang !== 'auto' ? Settings.lang : I18N.auto); }
         } catch (e) {}
-        try { await this.loadPlayer(); } catch (e) {}
-        try { this.leaderboards = await this.sdk.getLeaderboards(); } catch (e) {}
-        await this.loadPayments();
         try { this.sdk.features.LoadingAPI.ready(); } catch (e) {}
+        if (this.gpOn) { try { this.sdk.features.GameplayAPI.start(); } catch (e) {} }
         try {
-            this.sdk.on('game_api_pause', () => { this.adPause(true); });
+            this.sdk.on('game_api_pause', () => {
+                this.adPause(true);
+                if (state === 'PLAYING' || state === 'AIMING') pauseGame();
+            });
             this.sdk.on('game_api_resume', () => { this.adPause(false); });
         } catch (e) {}
+        try { await this.loadPlayer(); } catch (e) {}
+        try { this.leaderboards = await this.sdk.getLeaderboards(); } catch (e) {}
+        if (this.authorized) this.submitScore(GameData.bestDepth);
+        await this.loadPayments();
     },
 
     // ---- игрок и облачное сохранение ----
     async loadPlayer() {
         this.player = await this.sdk.getPlayer({ scopes: false });
         this.authorized = this.player.getMode() !== 'lite';
+        if (RESET_REQUESTED) { GameData.save(); this.flushCloud(); return; }
         try {
             const d = await this.player.getData(['save']);
             const c = d && d.save;
@@ -1592,10 +1622,14 @@ const Yandex = {
                 G.bestDepth = Math.max(G.bestDepth, c.bestDepth | 0);
                 if (!G.hadSave || (c.lastTime || 0) > G.lastTime) {
                     G.coins = Math.max(0, Math.floor(c.coins || 0));
+                    const keepMax = Math.max(G.stats.maxTier | 0, (c.stats && c.stats.maxTier) | 0);
                     G.stats = { ...G.stats, ...c.stats };
+                    G.stats.maxTier = Math.max(G.stats.maxTier | 0, keepMax);
                     G.boosts = { ...G.boosts, ...(c.boosts || {}) };
                     G.daily = { ...G.daily, ...(c.daily || {}) };
                     G.perm = { ...G.perm, ...(c.perm || {}) };
+                    G.permOff = { ...G.permOff, ...(c.permOff || {}) };
+                    if (Array.isArray(c.handled)) G.handled = Array.from(new Set([...(G.handled || []), ...c.handled])).slice(-30);
                     G.clamp();
                 }
                 G.hadSave = true;
@@ -1646,13 +1680,16 @@ const Yandex = {
                     (P.perm || []).forEach(b => { perm[b] = true; });
                     continue;
                 }
-                grantProduct(p.productID);
-                GameData.save();
+                if (!(GameData.handled || []).includes(p.purchaseToken)) {
+                    grantProduct(p.productID);
+                    GameData.handled = (GameData.handled || []).concat(p.purchaseToken).slice(-30);
+                    GameData.save();
+                    showToast(t('toast_restored', { name: PRODUCTS[p.productID].title }));
+                }
                 try { await this.payments.consumePurchase(p.purchaseToken); } catch (e) {}
-                showToast(t('toast_restored', { name: PRODUCTS[p.productID].title }));
             }
-            GameData.noAds = noAds;
-            GameData.perm = perm;
+            if (noAds) GameData.noAds = true;
+            Object.keys(perm).forEach(k => { if (perm[k]) GameData.perm[k] = true; });
             GameData.save();
         } catch (e) {}
     },
@@ -1662,8 +1699,8 @@ const Yandex = {
     },
     async buy(id, after) {
         if (!this.payments) {
-            if (typeof YaGames === 'undefined') {
-                // игра запущена не в Яндекс Играх: покупка проходит бесплатно (тестовый режим)
+            if (IS_DEV && typeof YaGames === 'undefined') {
+                // локальная отладка: покупка проходит бесплатно (только localhost / file://)
                 grantProduct(id);
                 GameData.save();
                 AudioEngine.ore(8);
@@ -1679,6 +1716,9 @@ const Yandex = {
         try {
             const pur = await this.payments.purchase({ id });
             grantProduct(id);
+            if (!PRODUCTS[id].once && pur && pur.purchaseToken) {
+                GameData.handled = (GameData.handled || []).concat(pur.purchaseToken).slice(-30);
+            }
             GameData.save();
             if (!PRODUCTS[id].once) { try { await this.payments.consumePurchase(pur.purchaseToken); } catch (e) {} }
             showToast(t('toast_thanks', { name: PRODUCTS[id].title }));
@@ -1693,7 +1733,11 @@ const Yandex = {
     // ---- реклама ----
     adPause(on) { AudioEngine.adMuted = on; AudioEngine.applyVolumes(); },
     rewarded(onReward) {
-        if (!this.sdk) { stubRewardedAd(onReward); return; }
+        if (!this.sdk) {
+            if (IS_DEV) stubRewardedAd(onReward);
+            else showToast(t('toast_ad_fail'));
+            return;
+        }
         let ok = false;
         this.sdk.adv.showRewardedVideo({ callbacks: {
             onOpen: () => this.adPause(true),
@@ -1702,8 +1746,11 @@ const Yandex = {
             onError: () => { this.adPause(false); showToast(t('toast_ad_fail')); }
         } });
     },
-    interstitial(done) {
-        if (GameData.noAds || Date.now() - this.lastInter < INTERSTITIAL_GAP) { done(); return; }
+    interstitial(done0) {
+        if (this.advBusy) return;
+        if (GameData.noAds || Date.now() - this.lastInter < INTERSTITIAL_GAP) { done0(); return; }
+        this.advBusy = true;
+        const done = () => { this.advBusy = false; done0(); };
         // короткая заглушка-предупреждение, потом сам ролик (или mock)
         let n = 2;
         const box = document.getElementById('adv-warn');
@@ -2073,7 +2120,11 @@ class PickaxeObj {
         }
 
         this.checkBlockCollisions();
-        if (this.mini && this.fireT <= 0) this.updateMini(dt);
+        if (this.mini) {
+            this.mini.life -= dt;
+            if (this.mini.life <= 0) this.mini = null;   // мини-кирка временная: 15 секунд
+            else if (this.fireT <= 0) this.updateMini(dt);
+        }
 
         if (this.durability <= 0) {
             this.durability = 0;
@@ -2106,7 +2157,7 @@ class PickaxeObj {
             this.durability += 30;
             addFloatText(x, y - 20, t('f_bench_dur'), '#8bf5ab', 17);
         } else {
-            this.mini = { a: 0, x: this.x, y: this.y };
+            this.mini = { a: 0, x: this.x, y: this.y, life: 15 };
             addFloatText(x, y - 20, t('f_bench_mini'), '#9ae6ff', 17);
         }
         createSparks(x, y + 10, '#9ae6ff', 14);
@@ -2337,7 +2388,9 @@ function startRun() {
 
     const bs = GameData.boosts;
     const pm = GameData.perm;
-    runBoost = { fire: !!bs.fire || !!pm.fire, coin: !!bs.coin || !!pm.coin, dur: !!bs.dur || !!pm.dur };
+    const po = GameData.permOff || {};
+    const pmOn = k => !!pm[k] && !po[k];   // куплено и не выключено тумблером
+    runBoost = { fire: !!bs.fire || pmOn('fire'), coin: !!bs.coin || pmOn('coin'), dur: !!bs.dur || pmOn('dur') };
     coinBoost = runBoost.coin ? 1.5 : 1;
     durBoost = runBoost.dur ? 1.25 : 1;
     GameData.boosts = { fire: false, coin: false, dur: false };
@@ -2494,9 +2547,10 @@ function renderAdCards(list) {
     renderDailyCard(list);
     AD_BOOSTS.forEach(a => {
         const owned = !!GameData.perm[a.id];
+        const off = owned && !!(GameData.permOff && GameData.permOff[a.id]);
         const armed = owned || !!GameData.boosts[a.id];
         const card = document.createElement('div');
-        card.className = 'upgrade-card' + (armed ? ' equipped' : '');
+        card.className = 'upgrade-card' + (armed && !off ? ' equipped' : '');
         card.innerHTML = `
             <div class="u-icon">${a.icon}</div>
             <div class="u-info">
@@ -2504,12 +2558,18 @@ function renderAdCards(list) {
                 <div class="u-desc">${a.desc}</div>
             </div>
             <div class="u-btns">
-                <button class="btn btn-buy ${armed ? 'equipped-btn' : ''}" data-act="ad">${owned ? t('forever') : (armed ? t('ready') : '📺<small>' + t('watch') + '</small>')}</button>
+                <button class="btn btn-buy ${armed && !off ? 'equipped-btn' : ''}" data-act="ad">${owned ? (off ? t('off') : t('on')) + '<small>' + t('forever') + '</small>' : (armed ? t('ready') : '📺<small>' + t('watch') + '</small>')}</button>
                 ${armed ? '' : `<button class="btn btn-buy btn-pay" data-act="pay">💳<small>${esc(Yandex.priceOf('boost_' + a.id))}</small></button>`}
             </div>`;
         const adBtn = card.querySelector('[data-act="ad"]');
         const payBtn = card.querySelector('[data-act="pay"]');
-        if (armed) adBtn.disabled = true;
+        if (owned) {
+            adBtn.onclick = () => {
+                GameData.permOff[a.id] = !GameData.permOff[a.id];
+                GameData.save();
+                renderUpgradesList();
+            };
+        } else if (armed) adBtn.disabled = true;
         else {
             adBtn.onclick = () => showRewardedAd(() => {
                 GameData.boosts[a.id] = true;
@@ -2537,8 +2597,8 @@ function renderUpgradesList() {
     if (currentTab === 'gear') {
         TIERS.forEach((tier, idx) => {
             const isEquipped = S.tierIdx === idx;
-            const isUnlocked = idx <= S.tierIdx;
-            const isNext = idx === S.tierIdx + 1;
+            const isUnlocked = idx <= S.maxTier;
+            const isNext = idx === S.maxTier + 1;
             const card = document.createElement('div');
             card.className = 'upgrade-card' + (isEquipped ? ' equipped' : '');
             const img = pickURL(tier.id);
@@ -2558,9 +2618,9 @@ function renderUpgradesList() {
             else { btn.dataset.cost = tier.cost; btn.dataset.locked = isNext ? '0' : '1'; btn.disabled = !isNext || GameData.coins < tier.cost; }
             btn.onclick = () => {
                 if (isUnlocked && !isEquipped) {
-                    S.tierIdx = idx; GameData.save(); renderUpgradesList();
+                    S.maxTier = Math.max(S.maxTier | 0, S.tierIdx | 0, idx); S.tierIdx = idx; GameData.save(); renderUpgradesList();
                 } else if (isNext && GameData.coins >= tier.cost) {
-                    GameData.coins -= tier.cost; S.tierIdx = idx; GameData.save(); renderUpgradesList();
+                    GameData.coins -= tier.cost; S.tierIdx = idx; S.maxTier = Math.max(S.maxTier | 0, idx); GameData.save(); renderUpgradesList();
                 }
             };
             list.appendChild(card);
@@ -2676,6 +2736,8 @@ canvas.addEventListener('pointermove', onPointerMove);
 canvas.addEventListener('pointerup', onPointerUp);
 canvas.addEventListener('pointercancel', onPointerUp);
 canvas.addEventListener('contextmenu', e => e.preventDefault());
+document.addEventListener('contextmenu', e => e.preventDefault());
+document.addEventListener('dragstart', e => e.preventDefault());
 
 // ============================================================
 //  МЕНЮ, НАСТРОЙКИ, ПАУЗА
@@ -2798,7 +2860,7 @@ $('btn-leaders-back').onclick = () => showScreen('menu');
 $('btn-hub-menu').onclick = goMenu;
 $('btn-start-run').onclick = startRun;
 $('btn-back-hub').onclick = () => Yandex.interstitial(openHub);
-$('btn-go-menu').onclick = () => Yandex.interstitial(goMenu);
+$('btn-play-again').onclick = () => Yandex.interstitial(startRun);
 $('revive-yes').onclick = () => Yandex.rewarded(reviveRun);
 $('revive-no').onclick = declineRevive;
 $('btn-double').onclick = () => {
@@ -3114,7 +3176,7 @@ function drawAimUI() {
     } else {
         pickaxe.rot *= 0.85;
         const bob = Math.sin(gameTime * 3) * 4;
-        ctx.font = '700 15px Fredoka, "Trebuchet MS", sans-serif';
+        ctx.font = '700 15px GameFont, "Trebuchet MS", sans-serif';
         ctx.textAlign = 'center';
         ctx.lineJoin = 'round';
         ctx.lineWidth = 4; ctx.strokeStyle = 'rgba(40,10,90,0.9)';
@@ -3434,12 +3496,14 @@ function render() {
             ctx.restore();
             if (pickaxe.mini) {
                 const m = pickaxe.mini;
+                if (m.life > 3 || Math.floor(m.life * 6) % 2 === 0) {   // мигает последние 3 секунды
                 ctx.save();
                 ctx.translate(m.x, m.y);
                 ctx.rotate(m.a * 2 + Math.PI / 2);
                 ctx.imageSmoothingEnabled = false;
                 ctx.drawImage(Textures.picks[pickaxe.tierId] || Textures.picks.wood, -13, -13, 26, 26);
                 ctx.restore();
+                }
             }
         }
 
@@ -3458,7 +3522,7 @@ function render() {
         ctx.lineJoin = 'round';
         for (const t of floatTexts) {
             ctx.globalAlpha = Math.min(1, t.life / 0.3);
-            ctx.font = `700 ${t.size}px Fredoka, "Trebuchet MS", sans-serif`;
+            ctx.font = `700 ${t.size}px GameFont, "Trebuchet MS", sans-serif`;
             ctx.lineWidth = 4;
             ctx.strokeStyle = 'rgba(40,10,90,0.9)';
             ctx.strokeText(t.text, t.x, t.y);
@@ -3488,6 +3552,13 @@ I18N.onChange = () => {
     if (!$('screen-leaders').classList.contains('hidden')) renderLeaders();
     refreshHud();
 };
+// ?reset=1 в адресе: стереть локальное и облачное сохранение и начать заново с палки
+const RESET_REQUESTED = (() => { try { return new URLSearchParams(location.search).has('reset'); } catch (e) { return false; } })();
+if (RESET_REQUESTED) {
+    try { ['mine_bouncer_save_v4', 'mine_bouncer_save_v3', 'mine_bouncer_save_v2'].forEach(k => localStorage.removeItem(k)); } catch (e) {}
+    try { history.replaceState(null, '', location.pathname + location.hash); } catch (e) {}
+}
+try { if (document.fonts && document.fonts.load) document.fonts.load('700 16px GameFont'); } catch (e) {}
 resizeCanvas();
 initTextures();
 GameData.load();
